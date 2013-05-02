@@ -51,6 +51,12 @@ class Track
     private $album;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="TrackPlay", mappedBy="track")
+     */
+    private $plays;
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="created_at", type="datetime")
      */
