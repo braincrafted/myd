@@ -5,23 +5,11 @@ namespace Bc\Bundle\Myd\LastFmBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Bc\Bundle\Myd\MusicBundle\Model\UserInterface;
+use Bc\Bundle\Myd\MusicBundle\Entity\User as BaseUser;
 use Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="lastfm_user")
- */
-class LastFmUser implements UserInterface
+class LastFmUser extends BaseUser
 {
-    /**
-     * @var integer
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
     /**
      * @var string
      * @ORM\Column(name="username", type="string", length=255)
@@ -45,6 +33,15 @@ class LastFmUser implements UserInterface
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->plays = new ArrayCollection();
+    }
 
     /**
      * {@inheritDoc}
@@ -78,6 +75,24 @@ class LastFmUser implements UserInterface
     public function getUsername()
     {
         return $this->username;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addPlay(TrackPlay $play)
+    {
+        $this->plays->add($play);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPlays()
+    {
+        return $this->plays;
     }
 
     /**

@@ -96,6 +96,19 @@ class TrackTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests {@see Track::addPlay()} and {@see Track::getPlay()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::addPlay()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::getPlays()
+     */
+    public function testAddPlay_GetPlays()
+    {
+        $play = m::mock('Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay');
+        $this->track->addPlay($play);
+        $this->assertContains($play, $this->track->getPlays());
+    }
+
+    /**
      * Tests {@see Track::setCreatedAt()} and {@see Track::getCreatedAt()}.
      *
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::setCreatedAt()

@@ -2,6 +2,8 @@
 
 namespace Bc\Bundle\Myd\MusicBundle\Model;
 
+use Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay;
+
 interface UserInterface
 {
     /**
@@ -35,6 +37,10 @@ interface UserInterface
      * @return string The username
      */
     public function getUsername();
+
+    public function addPlay(TrackPlay $play);
+
+    public function getPlays();
 
     /**
      * Sets the date the user was created at.

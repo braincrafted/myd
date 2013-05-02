@@ -2,6 +2,8 @@
 
 namespace Bc\Bundle\Myd\LastFmBundle\Tests\Entity;
 
+use \Mockery as m;
+
 use Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser;
 
 /**
@@ -41,6 +43,19 @@ class LastFmUserTest extends \PHPUnit_Framework_TestCase
     {
         $this->user->setUsername('foobar');
         $this->assertEquals('foobar', $this->user->getUsername());
+    }
+
+    /**
+     * Tests {@see LastFmUser::addPlay()} and {@see LastFmUser::getPlays()}.
+     *
+     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser::addPlay()
+     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser::getPlays()
+     */
+    public function testAddPlay_GetPlays()
+    {
+        $play = m::mock('Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay');
+        $this->user->addPlay($play);
+        $this->assertContains($play, $this->user->getPlays());
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Bc\Bundle\Myd\MusicBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -75,6 +76,7 @@ class Track
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+        $this->plays     = new ArrayCollection();
     }
 
     /**
@@ -219,6 +221,30 @@ class Track
     public function getAlbum()
     {
         return $this->album;
+    }
+
+    /**
+     * Adds the track play.
+     *
+     * @param TrackPlay $play The played track
+     *
+     * @return Track
+     */
+    public function addPlay(TrackPlay $play)
+    {
+        $this->plays->add($play);
+
+        return $this;
+    }
+
+    /**
+     * Returns the plays.
+     *
+     * @return TrackPlay Returns the plays
+     */
+    public function getPlays()
+    {
+        return $this->plays;
     }
 
     /**
