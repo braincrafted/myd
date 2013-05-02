@@ -22,7 +22,10 @@ class TrackTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * description
+     * Tests {@see Track::setId()} and {@see Track::getId()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::setId()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::getId()
      */
     public function testSetId_GetId()
     {
@@ -31,7 +34,10 @@ class TrackTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * description
+     * Tests {@see Track::setName()} and {@see Track::getName()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::setName()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::getName()
      */
     public function testSetName_GetName()
     {
@@ -40,7 +46,10 @@ class TrackTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * description
+     * Tests {@see Track::setMbId()} and {@see Track::getMbId()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::setMbId()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::getMbId()
      */
     public function testSetMbId_GetMbId()
     {
@@ -49,7 +58,10 @@ class TrackTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * description
+     * Tests {@see Track::setDuration()} and {@see Track::getDuration()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::setDuration()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::getDuration()
      */
     public function testSetDuration_GetDuration()
     {
@@ -58,7 +70,10 @@ class TrackTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * description
+     * Tests {@see Track::setArtist()} and {@see Track::getArtist()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::setArtist()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::getArtist()
      */
     public function testSetArtist_GetArtist()
     {
@@ -68,7 +83,10 @@ class TrackTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * description
+     * Tests {@see Track::setAlbum()} and {@see Track::getAlbum()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::setAlbum()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::getAlbum()
      */
     public function testSetAlbum_GetAlbum()
     {

@@ -62,11 +62,22 @@ class Track
      */
     private $updatedAt;
 
+    /**
+     * Constructor.
+     *
+     */
     public function __construct()
     {
         $this->createdAt = new \DateTime();
     }
 
+    /**
+     * Sets the ID.
+     *
+     * @param integer $id The ID
+     *
+     * @return Track
+     */
     public function setId($id)
     {
         $this->id = $id;
@@ -74,11 +85,23 @@ class Track
         return $this;
     }
 
+    /**
+     * Returns the ID.
+     *
+     * @return integer The ID
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * Sets the name.
+     *
+     * @param string $name The name of the track
+     *
+     * @return Track
+     */
     public function setName($name)
     {
         $this->name = $name;
@@ -86,11 +109,23 @@ class Track
         return $this;
     }
 
+    /**
+     * Returns the name.
+     *
+     * @return string The name of the track
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * Sets the MBID.
+     *
+     * @param string $mbId The MBID
+     *
+     * @return Track
+     */
     public function setMbId($mbId)
     {
         $this->mbId = $mbId;
@@ -98,11 +133,23 @@ class Track
         return $this;
     }
 
+    /**
+     * Returns the MBID.
+     *
+     * @return string The MBID
+     */
     public function getMbId()
     {
         return $this->mbId;
     }
 
+    /**
+     * Sets the duration of the track.
+     *
+     * @param integer $duration The duration of track
+     *
+     * @return Track
+     */
     public function setDuration($duration)
     {
         $this->duration = $duration;
@@ -110,11 +157,23 @@ class Track
         return $this;
     }
 
+    /**
+     * Returns the duration of track.
+     *
+     * @return integer The duration of the track
+     */
     public function getDuration()
     {
         return $this->duration;
     }
 
+    /**
+     * Sets the artist of the track.
+     *
+     * @param Artist $artist The artist of the track.
+     *
+     * @return Track
+     */
     public function setArtist(Artist $artist)
     {
         $this->artist = $artist;
@@ -122,11 +181,23 @@ class Track
         return $this;
     }
 
+    /**
+     * Returns the artist of the track.
+     *
+     * @return Artist The artist of the track
+     */
     public function getArtist()
     {
         return $this->artist;
     }
 
+    /**
+     * Sets the album of the track.
+     * #
+     * @param Album $album The track of the album
+     *
+     * @return Track
+     */
     public function setAlbum(Album $album)
     {
         $this->album = $album;
@@ -134,11 +205,23 @@ class Track
         return $this;
     }
 
+    /**
+     * Returns the album of the track.
+     *
+     * @return Album The album of the track
+     */
     public function getAlbum()
     {
         return $this->album;
     }
 
+    /**
+     * Sets the date the track was created at.
+     *
+     * @param \DateTime $createdAt The date the track was created at
+     *
+     * @return Track
+     */
     public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
@@ -146,11 +229,23 @@ class Track
         return $this;
     }
 
+    /**
+     * Returns the date the track was created at.
+     *
+     * @return \DateTime The date the track was created at
+     */
     public function getCreatedAt()
     {
         return $this->createdAt;
     }
 
+    /**
+     * Sets the date the track was updated at.
+     *
+     * @param \DateTime $updatedAt The date the track was updated at
+     *
+     * @return Track
+     */
     public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
@@ -158,6 +253,11 @@ class Track
         return $this;
     }
 
+    /**
+     * Returns the date the track was updated at.
+     *
+     * @return \DateTime The date the track was updated at
+     */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
