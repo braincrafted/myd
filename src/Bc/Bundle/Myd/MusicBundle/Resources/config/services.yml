@@ -1,0 +1,7 @@
+parameters:
+#    bc_myd_music.example.class: Bc\Bundle\Myd\MusicBundle\Example
+
+services:
+#    bc_myd_music.example:
+#        class: %bc_myd_music.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

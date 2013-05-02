@@ -1,0 +1,12 @@
+bc_myd_last_fm:
+    resource: "@BcMydLastFmBundle/Resources/config/routing.yml"
+    prefix:   /
+
+bc_myd_music:
+    resource: "@BcMydMusicBundle/Resources/config/routing.yml"
+    prefix:   /
+
+bc_myd_core:
+    resource: "@BcMydCoreBundle/Resources/config/routing.yml"
+    prefix:   /
+

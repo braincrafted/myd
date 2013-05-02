@@ -1,0 +1,7 @@
+parameters:
+#    bc_myd_last_fm.example.class: Bc\Bundle\Myd\LastFmBundle\Example
+
+services:
+#    bc_myd_last_fm.example:
+#        class: %bc_myd_last_fm.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
