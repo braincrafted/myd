@@ -20,7 +20,7 @@ class ImportCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $client = $this->getContainer()->get('bc_last_fm_service.client');
+        $client = $this->getContainer()->get('bc_lastfm.client');
 
         $command = $client->getCommand('user.getRecentTracks', array(
             'user'      => 'feredir',

@@ -19,7 +19,7 @@ class AppKernel extends Kernel
             new Bc\Bundle\Myd\CoreBundle\BcMydCoreBundle(),
             new Bc\Bundle\Myd\MusicBundle\BcMydMusicBundle(),
             new Bc\Bundle\Myd\LastFmBundle\BcMydLastFmBundle(),
-            new Bc\Bundle\LastFmServiceBundle\BcLastFmServiceBundle(),
+            new Bc\Bundle\LastfmBundle\BcLastfmBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
