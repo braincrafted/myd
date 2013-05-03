@@ -9,4 +9,4 @@ services:
         factory_service: bc_lastfm.client_factory
         factory_method: factory
         arguments:
-            - { api_key: 321c12389cc476b92c3a216024b363cd }
+            - { api_key: %bc_lastfm.api_key% }

@@ -26,6 +26,7 @@ class ImportCommand extends ContainerAwareCommand
             'user'      => 'feredir',
             'format'    => 'json'
         ));
+
         $responseModel = $client->execute($command);
         print_r($responseModel);
     }

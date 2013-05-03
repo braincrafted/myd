@@ -24,5 +24,11 @@ class BcLastfmExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        if (!isset($config['api_key'])) {
+            throw new \InvalidArgumentException('The option "bc_lastfm.api_key" must be set.');
+        }
+
+        $container->setParameter('bc_lastfm.api_key', $config['api_key']);
     }
 }
