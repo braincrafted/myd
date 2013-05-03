@@ -22,9 +22,9 @@ class ImportCommand extends ContainerAwareCommand
     {
         $client = $this->getContainer()->get('bc_last_fm_service.client');
 
-        $command = $client->getCommand('getArtistInfo', array(
-            'artist'    => 'Radiohead',
-            'api_key'   => '321c12389cc476b92c3a216024b363cd'
+        $command = $client->getCommand('user.getRecentTracks', array(
+            'user'      => 'feredir',
+            'format'    => 'json'
         ));
         $responseModel = $client->execute($command);
         print_r($responseModel);

@@ -31,7 +31,7 @@ class LastFmClient extends GuzzleClient
 
         $client = new self($config->get('base_url'), $config);
         // Attach a service description to the client
-        $description = ServiceDescription::factory(__DIR__ . '/Resources/config/service.json');
+        $description = ServiceDescription::factory(__DIR__ . '/Resources/config/client.json');
         $client->setDescription($description);
 
         return $client;
