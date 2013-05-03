@@ -15,6 +15,7 @@ class ImportCommand extends ContainerAwareCommand
         $this
             ->setName('bc:myd:lastfm:import')
             ->setDescription('Import data from Last.fm')
+            ->addArgument('username', InputArgument::REQUIRED, 'The last.fm username')
         ;
     }
 
@@ -23,7 +24,7 @@ class ImportCommand extends ContainerAwareCommand
         $client = $this->getContainer()->get('bc_lastfm.client');
 
         $command = $client->getCommand('user.getRecentTracks', array(
-            'user'      => 'feredir',
+            'user'      => $input->getArgument('username'),
             'format'    => 'json'
         ));
 
