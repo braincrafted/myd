@@ -1,7 +1,8 @@
-parameters:
-#    bc_myd_last_fm.example.class: Bc\Bundle\Myd\LastFmBundle\Example
-
 services:
-#    bc_myd_last_fm.example:
-#        class: %bc_myd_last_fm.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    bc_myd_lastfm.import.recent_tracks:
+        class: Bc\Bundle\Myd\LastFmBundle\Import\RecentTracksImporter
+        arguments:
+            - @bc_lastfm.client
+            - @bc_myd_lastfm.artist_manager
+            - @bc_myd_lastfm.album_manager
+            - @bc_myd_lastfm.track_manager

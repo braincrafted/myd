@@ -21,11 +21,24 @@ class TrackManager
         $this->class = $metadata->getName();
     }
 
-    public function createTrack()
+    public function createTrack(array $data = array())
     {
         $class = $this->class;
+        $track = new $class();
 
-        return new $class();
+        if (isset($data['name'])) {
+            $track->setName($data['name']);
+        }
+
+        if (isset($data['mbId'])) {
+            $track->setMbId($data['mbId']);
+        }
+
+        if (isset($data['duration'])) {
+            $track->setDuration($data['duration']);
+        }
+
+        return $track;
     }
 
     public function findTracks()

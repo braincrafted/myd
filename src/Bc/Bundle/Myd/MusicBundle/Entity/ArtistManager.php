@@ -21,11 +21,20 @@ class ArtistManager
         $this->class = $metadata->getName();
     }
 
-    public function createArtist()
+    public function createArtist(array $data = array())
     {
         $class = $this->class;
+        $artist = new $class();
 
-        return new $class();
+        if (isset($data['name'])) {
+            $artist->setName($data['name']);
+        }
+
+        if (isset($data['mbId'])) {
+            $artist->setMbId($data['mbId']);
+        }
+
+        return $artist;
     }
 
     public function findArtists()

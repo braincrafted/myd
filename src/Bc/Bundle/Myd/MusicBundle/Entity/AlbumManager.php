@@ -21,11 +21,24 @@ class AlbumManager
         $this->class = $metadata->getName();
     }
 
-    public function createAlbum()
+    public function createAlbum(array $data = array())
     {
         $class = $this->class;
+        $album = new $class();
 
-        return new $class();
+        if (isset($data['name'])) {
+            $album->setName($data['name']);
+        }
+
+        if (isset($data['mbId'])) {
+            $album->setMbId($data['mbId']);
+        }
+
+        if (isset($data['releaseDate'])) {
+            $album->setReleaseDate(new \DateTime($data['releaseDate']));
+        }
+
+        return $album;
     }
 
     public function findAlbums()

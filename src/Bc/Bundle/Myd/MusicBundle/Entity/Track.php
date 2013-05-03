@@ -33,7 +33,7 @@ class Track
 
     /**
      * @var integer
-     * @ORM\Column(name="duration", type="integer")
+     * @ORM\Column(name="duration", type="integer", nullable=true)
      */
     private $duration;
 

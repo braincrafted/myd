@@ -1,7 +1,18 @@
-parameters:
-#    bc_myd_music.example.class: Bc\Bundle\Myd\MusicBundle\Example
-
 services:
-#    bc_myd_music.example:
-#        class: %bc_myd_music.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    bc_myd_lastfm.artist_manager:
+        class: Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager
+        arguments:
+            - @doctrine.orm.entity_manager
+            - "Bc\Bundle\Myd\MusicBundle\Entity\Artist"
+
+    bc_myd_lastfm.album_manager:
+        class: Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager
+        arguments:
+            - @doctrine.orm.entity_manager
+            - "Bc\Bundle\Myd\MusicBundle\Entity\Album"
+
+    bc_myd_lastfm.track_manager:
+        class: Bc\Bundle\Myd\MusicBundle\Entity\TrackManager
+        arguments:
+            - @doctrine.orm.entity_manager
+            - "Bc\Bundle\Myd\MusicBundle\Entity\Track"
