@@ -63,7 +63,7 @@ class Artist
      */
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTime(null, new \DateTimeZone('UTC'));
         $this->albums    = new ArrayCollection();
         $this->tracks    = new ArrayCollection();
     }

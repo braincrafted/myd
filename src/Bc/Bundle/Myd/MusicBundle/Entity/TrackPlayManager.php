@@ -4,7 +4,7 @@ namespace Bc\Bundle\Myd\MusicBundle\Entity;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-class AlbumManager
+class TrackPlayManager
 {
     /** @var ObjectManager */
     private $objectManager;
@@ -21,40 +21,32 @@ class AlbumManager
         $this->class = $metadata->getName();
     }
 
-    public function createAlbum(array $data = array())
+    public function createTrackPlay(array $data = array())
     {
         $class = $this->class;
-        $album = new $class();
+        $trackPlay = new $class();
 
-        if (isset($data['name'])) {
-            $album->setName($data['name']);
+        if (isset($data['playDate'])) {
+            $trackPlay->setPlayDate($data['playDate']);
         }
 
-        if (isset($data['mbId'])) {
-            $album->setMbId($data['mbId']);
-        }
-
-        if (isset($data['releaseDate'])) {
-            $album->setReleaseDate(new \DateTime($data['releaseDate']));
-        }
-
-        return $album;
+        return $trackPlay;
     }
 
-    public function findAlbums()
+    public function findTrackPlays()
     {
         return $this->repository->findAll();
     }
 
-    public function findAlbumByMbId($mbId)
+    public function findTrackPlayByMbId($mbId)
     {
         return $this->repository->findOneBy(array('mbId' => $mbId));
     }
 
-    public function updateAlbum(Album $artist, $andFlush = true)
+    public function updateTrackPlay(TrackPlay $trackPlay, $andFlush = true)
     {
-        $artist->setUpdatedAt(new \DateTime(null, new \DateTimeZone('UTC')));
-        $this->objectManager->persist($artist);
+        $trackPlay->setUpdatedAt(new \DateTime(null, new \DateTimeZone('UTC')));
+        $this->objectManager->persist($trackPlay);
 
         if ($andFlush) {
             $this->flush();

@@ -7,7 +7,9 @@ use Bc\Bundle\Myd\MusicBundle\Entity\Artist;
 use Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager;
 use Bc\Bundle\Myd\MusicBundle\Entity\Album;
 use Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager;
+use Bc\Bundle\Myd\MusicBundle\Entity\Track;
 use Bc\Bundle\Myd\MusicBundle\Entity\TrackManager;
+use Bc\Bundle\Myd\MusicBundle\Entity\TrackPlayManager;
 
 class RecentTracksImporter
 {
@@ -23,6 +25,9 @@ class RecentTracksImporter
     /** @var TrackManager */
     private $trackManager;
 
+    /** @var TrackPlayManager */
+    private $trackPlayManager;
+
     /** @var array */
     private $artistCreatedCache = array();
 
@@ -32,12 +37,13 @@ class RecentTracksImporter
     /** @var array */
     private $trackCache = array();
 
-    public function __construct(Client $client, ArtistManager $artistManager, AlbumManager $albumManager, TrackManager $trackManager)
+    public function __construct(Client $client, ArtistManager $artistManager, AlbumManager $albumManager, TrackManager $trackManager, TrackPlayManager $trackPlayManager)
     {
         $this->client           = $client;
         $this->artistManager    = $artistManager;
         $this->albumManager     = $albumManager;
         $this->trackManager     = $trackManager;
+        $this->trackPlayManager = $trackPlayManager;
     }
 
     public function import(array $parameters)
@@ -56,12 +62,14 @@ class RecentTracksImporter
         foreach ($response['recenttracks']['track'] as $trackPlayData) {
             $artist = $this->importArtist($trackPlayData['artist']);
             $album  = $this->importAlbum($trackPlayData['album'], $artist);
-            $this->importTrack($trackPlayData, $album, $artist);
+            $track  = $this->importTrack($trackPlayData, $album, $artist);
+            $this->importTrackPlay($trackPlayData, $track);
         }
 
         $this->artistManager->flush();
         $this->albumManager->flush();
         $this->trackManager->flush();
+        $this->trackPlayManager->flush();
     }
 
     protected function importArtist(array $rawData)
@@ -144,5 +152,23 @@ class RecentTracksImporter
         }
 
         $this->trackCache[$track->getMbId()] = $track;
+
+        return $track;
+    }
+
+    protected function importTrackPlay(array $rawData, Track $track)
+    {
+        if (!isset($rawData['date'])) {
+            return;
+        }
+
+        $data = array(
+            'playDate'  => new \DateTime($rawData['date']['#text'], new \DateTimeZone('UTC'))
+        );
+
+        $trackPlay = $this->trackPlayManager->createTrackPlay($data);
+        $trackPlay->setTrack($track);
+
+        $this->trackPlayManager->updateTrackPlay($trackPlay, false);
     }
 }

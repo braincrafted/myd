@@ -6,3 +6,4 @@ services:
             - @bc_myd_lastfm.artist_manager
             - @bc_myd_lastfm.album_manager
             - @bc_myd_lastfm.track_manager
+            - @bc_myd_lastfm.track_play_manager

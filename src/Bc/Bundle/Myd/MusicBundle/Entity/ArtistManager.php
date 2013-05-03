@@ -49,7 +49,7 @@ class ArtistManager
 
     public function updateArtist(Artist $artist, $andFlush = true)
     {
-        $artist->setUpdatedAt(new \DateTime());
+        $artist->setUpdatedAt(new \DateTime(null, new \DateTimeZone('UTC')));
         $this->objectManager->persist($artist);
 
         if ($andFlush) {

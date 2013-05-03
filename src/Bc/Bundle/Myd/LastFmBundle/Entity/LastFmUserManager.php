@@ -40,7 +40,7 @@ class LastFmUserManager
 
     public function updateLastFmUser(LastFmUser $artist, $andFlush = true)
     {
-        $artist->setUpdatedAt(new \DateTime());
+        $artist->setUpdatedAt(new \DateTime(null, new \DateTimeZone('UTC')));
         $this->objectManager->persist($artist);
 
         if ($andFlush) {

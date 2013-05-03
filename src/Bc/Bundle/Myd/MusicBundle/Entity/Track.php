@@ -75,7 +75,7 @@ class Track
      */
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTime(null, new \DateTimeZone('UTC'));
         $this->plays     = new ArrayCollection();
     }
 

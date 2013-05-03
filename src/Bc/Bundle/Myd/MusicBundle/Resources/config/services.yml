@@ -16,3 +16,9 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
             - "Bc\Bundle\Myd\MusicBundle\Entity\Track"
+
+    bc_myd_lastfm.track_play_manager:
+        class: Bc\Bundle\Myd\MusicBundle\Entity\TrackPlayManager
+        arguments:
+            - @doctrine.orm.entity_manager
+            - "Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay"

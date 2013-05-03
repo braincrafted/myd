@@ -37,6 +37,12 @@ class TrackPlay
 
     /**
      * @var \DateTime
+     * @ORM\Column(name="play_date", type="datetime")
+     */
+    private $playDate;
+
+    /**
+     * @var \DateTime
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
@@ -53,7 +59,7 @@ class TrackPlay
      */
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTime(null, new \DateTimeZone('UTC'));
     }
 
     /**
@@ -123,6 +129,18 @@ class TrackPlay
     public function getUser()
     {
         return $this->user;
+    }
+
+    public function setPlayDate(\DateTime $playDate)
+    {
+        $this->playDate = $playDate;
+
+        return $this;
+    }
+
+    public function getPlayDate()
+    {
+        return $this->playDate;
     }
 
     public function setCreatedAt($createdAt)

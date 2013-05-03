@@ -65,7 +65,7 @@ class Album
     public function __construct()
     {
         $this->tracks    = new ArrayCollection();
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTime(null, new \DateTimeZone('UTC'));
     }
 
     /**
