@@ -8,6 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Bc\Bundle\Myd\MusicBundle\Entity\User as BaseUser;
 use Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay;
 
+/**
+ * @ORM\Entity
+ */
 class LastFmUser extends BaseUser
 {
     /**

@@ -10,6 +10,8 @@ use Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager;
 use Bc\Bundle\Myd\MusicBundle\Entity\Track;
 use Bc\Bundle\Myd\MusicBundle\Entity\TrackManager;
 use Bc\Bundle\Myd\MusicBundle\Entity\TrackPlayManager;
+use Bc\Bundle\Myd\MusicBundle\Model\UserManagerInterface;
+use Bc\Bundle\Myd\MusicBundle\Model\UserInterface;
 
 class RecentTracksImporter
 {
@@ -28,6 +30,9 @@ class RecentTracksImporter
     /** @var TrackPlayManager */
     private $trackPlayManager;
 
+    /** @var UserManagerInterface */
+    private $userManager;
+
     /** @var array */
     private $artistCreatedCache = array();
 
@@ -37,13 +42,14 @@ class RecentTracksImporter
     /** @var array */
     private $trackCache = array();
 
-    public function __construct(Client $client, ArtistManager $artistManager, AlbumManager $albumManager, TrackManager $trackManager, TrackPlayManager $trackPlayManager)
+    public function __construct(Client $client, ArtistManager $artistManager, AlbumManager $albumManager, TrackManager $trackManager, TrackPlayManager $trackPlayManager, UserManagerInterface $userManager)
     {
         $this->client           = $client;
         $this->artistManager    = $artistManager;
         $this->albumManager     = $albumManager;
         $this->trackManager     = $trackManager;
         $this->trackPlayManager = $trackPlayManager;
+        $this->userManager      = $userManager;
     }
 
     public function import(array $parameters)
@@ -51,6 +57,9 @@ class RecentTracksImporter
         if (!isset($parameters['user'])) {
             throw new \InvalidArgumentException('The parameter "user" must be set.');
         }
+
+        // Import user (or retrieve User object from database if it does not exist)
+        $user = $this->importUser($parameters['user']);
 
         $command = $this->client->getCommand('user.getRecentTracks', array(
             'user'      => $parameters['user'],
@@ -63,13 +72,25 @@ class RecentTracksImporter
             $artist = $this->importArtist($trackPlayData['artist']);
             $album  = $this->importAlbum($trackPlayData['album'], $artist);
             $track  = $this->importTrack($trackPlayData, $album, $artist);
-            $this->importTrackPlay($trackPlayData, $track);
+            $this->importTrackPlay($trackPlayData, $track, $user);
         }
 
         $this->artistManager->flush();
         $this->albumManager->flush();
         $this->trackManager->flush();
         $this->trackPlayManager->flush();
+    }
+
+    protected function importUser($username)
+    {
+        $user = $this->userManager->findUserByUsername($username);
+
+        if (!$user) {
+            $user = $this->userManager->createUser(array('username' => $username));
+            $this->userManager->updateUser($user);
+        }
+
+        return $user;
     }
 
     protected function importArtist(array $rawData)
@@ -156,7 +177,7 @@ class RecentTracksImporter
         return $track;
     }
 
-    protected function importTrackPlay(array $rawData, Track $track)
+    protected function importTrackPlay(array $rawData, Track $track, UserInterface $user)
     {
         if (!isset($rawData['date'])) {
             return;
@@ -168,6 +189,7 @@ class RecentTracksImporter
 
         $trackPlay = $this->trackPlayManager->createTrackPlay($data);
         $trackPlay->setTrack($track);
+        $trackPlay->setUser($user);
 
         $this->trackPlayManager->updateTrackPlay($trackPlay, false);
     }

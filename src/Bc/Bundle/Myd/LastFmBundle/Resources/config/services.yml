@@ -3,7 +3,14 @@ services:
         class: Bc\Bundle\Myd\LastFmBundle\Import\RecentTracksImporter
         arguments:
             - @bc_lastfm.client
-            - @bc_myd_lastfm.artist_manager
-            - @bc_myd_lastfm.album_manager
-            - @bc_myd_lastfm.track_manager
-            - @bc_myd_lastfm.track_play_manager
+            - @bc_myd_music.artist_manager
+            - @bc_myd_music.album_manager
+            - @bc_myd_music.track_manager
+            - @bc_myd_music.track_play_manager
+            - @bc_myd_lastfm.user_manager
+
+    bc_myd_lastfm.user_manager:
+        class: Bc\Bundle\Myd\MusicBundle\Entity\UserManager
+        arguments:
+            - @doctrine.orm.entity_manager
+            - Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser
