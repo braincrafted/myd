@@ -53,7 +53,8 @@ class TrackManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests {@see TrackManager::createTrack()}.
      *
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::createTrack
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::createTrack()
      */
     public function testCreateTrack()
     {
@@ -61,8 +62,28 @@ class TrackManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests {@see TrackManager::createTrack()} with prefilled data.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::createTrack()
+     */
+    public function testCreateTrack_WithData()
+    {
+        $track = $this->manager->createTrack(array(
+            'name'          => 'Angels',
+            'mbId'          => 'ca4a7e9c-97a3-4a6a-97a1-f9c6c2e8cf57',
+            'duration'      => 360
+        ));
+
+        $this->assertEquals('Angels', $track->getName());
+        $this->assertEquals('ca4a7e9c-97a3-4a6a-97a1-f9c6c2e8cf57', $track->getMbId());
+        $this->assertEquals(360, $track->getDuration());
+    }
+
+    /**
      * Tests {@see TrackManager::findTracks()}.
      *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::__construct()
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::findTracks()
      */
     public function testFindTracks()
@@ -81,6 +102,7 @@ class TrackManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests {@see TrackManager::findTrackByMbId()}.
      *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::__construct()
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::findTrackByMbId()
      */
     public function testFindTrackByMbId()
@@ -99,7 +121,8 @@ class TrackManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests {@see TrackManager::updateTrack()}.
      *
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::findTrack()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::updateTrack()
      */
     public function testUpdateTrack()
     {
@@ -124,7 +147,8 @@ class TrackManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests {@see TrackManager::updateTrack()} with $andFlush = false.
      *
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::findTrack()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::updateTrack()
      */
     public function testUpdateTrack_WithoutFlush()
     {
@@ -144,6 +168,22 @@ class TrackManagerTest extends \PHPUnit_Framework_TestCase
             ->never();
 
         $this->manager->updateTrack($track, false);
+    }
+
+    /**
+     * Tests {@see TrackManager::flush()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::flush()
+     */
+    public function testFlush()
+    {
+        $this->om
+            ->shouldReceive('flush')
+            ->withNoArgs()
+            ->once();
+
+        $this->manager->flush();
     }
 }
 

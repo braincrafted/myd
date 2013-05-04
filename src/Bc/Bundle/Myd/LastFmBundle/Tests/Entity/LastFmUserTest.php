@@ -22,15 +22,13 @@ class LastFmUserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests {@see LastFmUser::setId()} and {@see LastFmUser::getId()}.
+     * Tests {@see LastFmUser::__contruct()}.
      *
-     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser::setId()
-     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser::getId()
+     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser::__construct()
      */
-    public function testSetId_GetId()
+    public function testConstruct()
     {
-        $this->user->setId(42);
-        $this->assertEquals(42, $this->user->getId());
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $this->user->getPlays());
     }
 
     /**
@@ -43,44 +41,5 @@ class LastFmUserTest extends \PHPUnit_Framework_TestCase
     {
         $this->user->setUsername('foobar');
         $this->assertEquals('foobar', $this->user->getUsername());
-    }
-
-    /**
-     * Tests {@see LastFmUser::addPlay()} and {@see LastFmUser::getPlays()}.
-     *
-     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser::addPlay()
-     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser::getPlays()
-     */
-    public function testAddPlay_GetPlays()
-    {
-        $play = m::mock('Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay');
-        $this->user->addPlay($play);
-        $this->assertContains($play, $this->user->getPlays());
-    }
-
-    /**
-     * Tests {@see LastFmuser::setCreatedAt()} and {@see LastFmUser::getCreatedAt()}.
-     *
-     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser::setCreatedAt()
-     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser::setUpdatedAt()
-     */
-    public function testSetCreatedAt_GetCreatedAt()
-    {
-        $date = new \DateTime();
-        $this->user->setCreatedAt($date);
-        $this->assertEquals($date, $this->user->getCreatedAt());
-    }
-
-    /**
-     * Tests {@see LastFmuser::setUpdatedAt()} and {@see LastFmUser::getUpdatedAt()}.
-     *
-     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser::setUpdatedAt()
-     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser::setUpdatedAt()
-     */
-    public function testSetUpdatedAt_GetUpdatedAt()
-    {
-        $date = new \DateTime();
-        $this->user->setUpdatedAt($date);
-        $this->assertEquals($date, $this->user->getUpdatedAt());
     }
 }

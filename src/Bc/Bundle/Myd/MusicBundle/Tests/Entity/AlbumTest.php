@@ -22,6 +22,17 @@ class AlbumTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests {@see Album::__construct()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Album::__construct()
+     */
+    public function testConstruct()
+    {
+        $date = new \DateTime(null, new \DateTimeZone('UTC'));
+        $this->assertEquals($date->format('H:i:s'), $this->album->getCreatedAt()->format('H:i:s'));
+    }
+
+    /**
      * Tests {@see Album::setId()} and {@see Album::getId()}
      *
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\Album::setId()

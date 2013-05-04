@@ -35,7 +35,7 @@ class AlbumManager
         }
 
         if (isset($data['releaseDate'])) {
-            $album->setReleaseDate(new \DateTime($data['releaseDate']));
+            $album->setReleaseDate($data['releaseDate']);
         }
 
         return $album;

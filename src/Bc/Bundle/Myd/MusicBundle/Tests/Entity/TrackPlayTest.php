@@ -22,6 +22,17 @@ class TrackPlayTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests {@see TrackPlay::__construct()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay::__construct()
+     */
+    public function testConstruct()
+    {
+        $date = new \DateTime(null, new \DateTimeZone('UTC'));
+        $this->assertEquals($date->format('H:i:s'), $this->play->getCreatedAt()->format('H:i:s'));
+    }
+
+    /**
      * Tests {@see TrackPlay::setId()} and {@see TrackPlay::getId()}.
      *
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay::setId()
@@ -52,7 +63,7 @@ class TrackPlayTest extends \PHPUnit_Framework_TestCase
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay::setUser()
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay::getUser()
      */
-    public function testSetUser_GetTrack()
+    public function testSetUser_GetUser()
     {
         $user = m::mock('Bc\Bundle\Myd\MusicBundle\Model\UserInterface');
         $this->play->setUser($user);
@@ -60,10 +71,23 @@ class TrackPlayTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests {@see TrackPlay::setPlayDate()} and {@see TrackPlay::getPlayDate()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay::setPlayDate()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay::getPlayDate()
+     */
+    public function testSetPlayDate_GetPlayDate()
+    {
+        $date = new \DateTime(null, new \DateTimeZone('UTC'));
+        $this->play->setPlayDate($date);
+        $this->assertEquals($date, $this->play->getPlayDate());
+    }
+
+    /**
      * Tests {@see TrackPlay::setCreatedAt()} and {@see TrackPlay::getCreatedAt()}.
      *
-     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\TrackPlay::setCreatedAt()
-     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\TrackPlay::getCreatedAt()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay::setCreatedAt()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay::getCreatedAt()
      */
     public function testSetCreatedAt_GetCreatedAt()
     {
@@ -75,8 +99,8 @@ class TrackPlayTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests {@see TrackPlay::setUpdatedAt()} and {@see TrackPlay::getUpdatedAt()}.
      *
-     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\TrackPlay::setUpdatedAt()
-     * @covers Bc\Bundle\Myd\LastFmBundle\Entity\TrackPlay::getUpdatedAt()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay::setUpdatedAt()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackPlay::getUpdatedAt()
      */
     public function testSetUpdatedAt_GetUpdatedAt()
     {

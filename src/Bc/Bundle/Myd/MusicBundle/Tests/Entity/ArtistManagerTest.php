@@ -53,7 +53,8 @@ class ArtistManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests {@see ArtistManager::createArtist()}.
      *
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::createArtist
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::createArtist()
      */
     public function testCreateArtist()
     {
@@ -61,8 +62,26 @@ class ArtistManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests {@see ArtistManager::createArtist()} with prefilled data.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::createArtist()
+     */
+    public function testCreateArtist_WithData()
+    {
+        $artist = $this->manager->createArtist(array(
+            'name'  => 'The Thermals',
+            'mbId'  => '7cd2d860-c6d7-4be2-af50-57c51ee45687'
+        ));
+
+        $this->assertEquals('The Thermals', $artist->getName());
+        $this->assertEquals('7cd2d860-c6d7-4be2-af50-57c51ee45687', $artist->getMbId());
+    }
+
+    /**
      * Tests {@see ArtistManager::findArtists()}.
      *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::__construct()
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::findArtists()
      */
     public function testFindArtists()
@@ -81,6 +100,7 @@ class ArtistManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests {@see ArtistManager::findArtistByMbId()}.
      *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::__construct()
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::findArtistByMbId()
      */
     public function testFindArtistByMbId()
@@ -99,7 +119,8 @@ class ArtistManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests {@see ArtistManager::updateArtist()}.
      *
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::findArtist()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::updateArtist()
      */
     public function testUpdateArtist()
     {
@@ -124,7 +145,8 @@ class ArtistManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests {@see ArtistManager::updateArtist()} with $andFlush = false.
      *
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::findArtist()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::updateArtist()
      */
     public function testUpdateArtist_WithoutFlush()
     {
@@ -144,6 +166,22 @@ class ArtistManagerTest extends \PHPUnit_Framework_TestCase
             ->never();
 
         $this->manager->updateArtist($artist, false);
+    }
+
+    /**
+     * Tests {@see ArtistManager::flush()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::flush()
+     */
+    public function testFlush()
+    {
+        $this->om
+            ->shouldReceive('flush')
+            ->withNoArgs()
+            ->once();
+
+        $this->manager->flush();
     }
 }
 

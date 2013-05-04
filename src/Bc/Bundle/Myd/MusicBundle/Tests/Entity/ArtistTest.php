@@ -22,6 +22,17 @@ class ArtistTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests {@see Artist::__construct()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Artist::__construct()
+     */
+    public function testConstruct()
+    {
+        $date = new \DateTime(null, new \DateTimeZone('UTC'));
+        $this->assertEquals($date->format('H:i:s'), $this->artist->getCreatedAt()->format('H:i:s'));
+    }
+
+    /**
      * Tests {@see setId()} and {@see getId()}.
      *
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\Artist::setId()
@@ -49,7 +60,7 @@ class ArtistTest extends \PHPUnit_Framework_TestCase
      * Tests {@see setMbId()} and {@see getMbId()}.
      *
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\Artist::setMbId()
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Artist::setMbId()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Artist::getMbId()
      */
     public function testSetMbId_GetMbId()
     {

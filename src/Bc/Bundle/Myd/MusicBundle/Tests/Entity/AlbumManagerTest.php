@@ -53,7 +53,8 @@ class AlbumManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests {@see AlbumManager::createAlbum()}.
      *
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::createAlbum
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::createAlbum()
      */
     public function testCreateAlbum()
     {
@@ -61,8 +62,28 @@ class AlbumManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests {@see AlbumManager::createAlbum()} with prefilled data.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::createAlbum()
+     */
+    public function testCreateAlbum_WithData()
+    {
+        $album = $this->manager->createAlbum(array(
+            'name'          => 'Desperate Ground',
+            'mbId'          => 'fc410ce5-f382-44ce-8619-a17fe48b5369',
+            'releaseDate'   => new \DateTime('16 Apr 2013', new \DateTimeZone('UTC'))
+        ));
+
+        $this->assertEquals('Desperate Ground', $album->getName());
+        $this->assertEquals('fc410ce5-f382-44ce-8619-a17fe48b5369', $album->getMbId());
+        $this->assertEquals('2013-04-16', $album->getReleaseDate()->format('Y-m-d'));
+    }
+
+    /**
      * Tests {@see AlbumManager::findAlbums()}.
      *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::__construct()
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::findAlbums()
      */
     public function testFindAlbums()
@@ -81,6 +102,7 @@ class AlbumManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests {@see AlbumManager::findAlbumByMbId()}.
      *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::__construct()
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::findAlbumByMbId()
      */
     public function testFindAlbumByMbId()
@@ -99,7 +121,8 @@ class AlbumManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests {@see AlbumManager::updateAlbum()}.
      *
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::findAlbum()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::updateAlbum()
      */
     public function testUpdateAlbum()
     {
@@ -124,7 +147,8 @@ class AlbumManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests {@see AlbumManager::updateAlbum()} with $andFlush = false.
      *
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::findAlbum()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::updateAlbum()
      */
     public function testUpdateAlbum_WithoutFlush()
     {
@@ -144,6 +168,21 @@ class AlbumManagerTest extends \PHPUnit_Framework_TestCase
             ->never();
 
         $this->manager->updateAlbum($album, false);
+    }
+
+    /**
+     * Tests {@see AlbumManager::flush()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::flush()
+     */
+    public function testFlush()
+    {
+        $this->om
+            ->shouldReceive('flush')
+            ->withNoArgs()
+            ->once();
+
+        $this->manager->flush();
     }
 }
 
