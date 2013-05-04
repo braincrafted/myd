@@ -1,0 +1,6 @@
+services:
+    bc_myd_lastfm.user_manager:
+        class: Bc\Bundle\Myd\MusicBundle\Entity\UserManager
+        arguments:
+            - @doctrine.orm.entity_manager
+            - Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser

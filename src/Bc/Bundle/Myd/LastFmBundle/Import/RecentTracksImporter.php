@@ -4,7 +4,6 @@ namespace Bc\Bundle\Myd\LastFmBundle\Import;
 
 use Bc\Bundle\LastFmBundle\Client;
 use Bc\Bundle\Myd\MusicBundle\Entity\Artist;
-use Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager;
 use Bc\Bundle\Myd\MusicBundle\Entity\Album;
 use Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager;
 use Bc\Bundle\Myd\MusicBundle\Entity\Track;
@@ -18,8 +17,8 @@ class RecentTracksImporter
     /** @var Client */
     private $client;
 
-    /** @var ArtistManager */
-    private $artistManager;
+    /** @var ImportFactory */
+    private $factory;
 
     /** @var AlbumManager */
     private $albumManager;
@@ -34,18 +33,15 @@ class RecentTracksImporter
     private $userManager;
 
     /** @var array */
-    private $artistCreatedCache = array();
-
-    /** @var array */
-    private $albumCreatedCache = array();
+    private $albumCache = array();
 
     /** @var array */
     private $trackCache = array();
 
-    public function __construct(Client $client, ArtistManager $artistManager, AlbumManager $albumManager, TrackManager $trackManager, TrackPlayManager $trackPlayManager, UserManagerInterface $userManager)
+    public function __construct(Client $client, ImportFactory $factory, AlbumManager $albumManager, TrackManager $trackManager, TrackPlayManager $trackPlayManager, UserManagerInterface $userManager)
     {
         $this->client           = $client;
-        $this->artistManager    = $artistManager;
+        $this->factory = $factory;
         $this->albumManager     = $albumManager;
         $this->trackManager     = $trackManager;
         $this->trackPlayManager = $trackPlayManager;
@@ -69,13 +65,13 @@ class RecentTracksImporter
         $response = $this->client->execute($command);
 
         foreach ($response['recenttracks']['track'] as $trackPlayData) {
-            $artist = $this->importArtist($trackPlayData['artist']);
+            $artist = $this->factory->getArtistImporter()->import($trackPlayData['artist']);
             $album  = $this->importAlbum($trackPlayData['album'], $artist);
             $track  = $this->importTrack($trackPlayData, $album, $artist);
             $this->importTrackPlay($trackPlayData, $track, $user);
         }
 
-        $this->artistManager->flush();
+        $this->factory->getArtistImporter()->flush();
         $this->albumManager->flush();
         $this->trackManager->flush();
         $this->trackPlayManager->flush();
@@ -93,33 +89,6 @@ class RecentTracksImporter
         return $user;
     }
 
-    protected function importArtist(array $rawData)
-    {
-        $data = array(
-            'name'  => $rawData['#text'],
-            'mbId'  => $rawData['mbid']
-        );
-
-        $artist = null;
-
-        if (isset($this->artistCreatedCache[$data['mbId']])) {
-            $artist = $this->artistCreatedCache[$data['mbId']];
-        }
-
-        if (!$artist) {
-            $artist = $this->artistManager->findArtistByMbId($data['mbId']);
-        }
-
-        if (!$artist) {
-            $artist = $this->artistManager->createArtist($data);
-            $this->artistManager->updateArtist($artist, false);
-        }
-
-        $this->artistCreatedCache[$artist->getMbId()] = $artist;
-
-        return $artist;
-    }
-
     protected function importAlbum(array $rawData, Artist $artist)
     {
         $data = array(
@@ -129,8 +98,8 @@ class RecentTracksImporter
 
         $album = null;
 
-        if (isset($this->albumCreatedCache[$data['mbId']])) {
-            $album = $this->albumCreatedCache[$data['mbId']];
+        if (isset($this->albumCache[$data['mbId']])) {
+            $album = $this->albumCache[$data['mbId']];
         }
 
         if (!$album) {
@@ -143,7 +112,7 @@ class RecentTracksImporter
             $this->albumManager->updateAlbum($album, false);
         }
 
-        $this->albumCreatedCache[$album->getMbId()] = $album;
+        $this->albumCache[$album->getMbId()] = $album;
 
         return $album;
     }

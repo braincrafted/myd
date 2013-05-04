@@ -1,16 +1,15 @@
 services:
+    bc_myd_lastfm.import.factory:
+        class: Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory
+        calls:
+            - [ setContainer, [ "@service_container" ] ]
+
     bc_myd_lastfm.import.recent_tracks:
         class: Bc\Bundle\Myd\LastFmBundle\Import\RecentTracksImporter
         arguments:
             - @bc_lastfm.client
-            - @bc_myd_music.artist_manager
+            - @bc_myd_lastfm.import.factory
             - @bc_myd_music.album_manager
             - @bc_myd_music.track_manager
             - @bc_myd_music.track_play_manager
             - @bc_myd_lastfm.user_manager
-
-    bc_myd_lastfm.user_manager:
-        class: Bc\Bundle\Myd\MusicBundle\Entity\UserManager
-        arguments:
-            - @doctrine.orm.entity_manager
-            - Bc\Bundle\Myd\LastFmBundle\Entity\LastFmUser
