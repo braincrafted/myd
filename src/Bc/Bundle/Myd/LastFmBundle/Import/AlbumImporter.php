@@ -5,7 +5,7 @@ namespace Bc\Bundle\Myd\LastFmBundle\Import;
 use Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager;
 use Bc\Bundle\Myd\MusicBundle\Entity\Artist;
 
-class AlbumImporter
+class AlbumImporter implements ImporterInterface
 {
     /** @var array */
     private $cache;
@@ -16,6 +16,10 @@ class AlbumImporter
     public function __construct(AlbumManager $albumManager)
     {
         $this->albumManager = $albumManager;
+    }
+
+    public function setFactory(ImportFactory $factory)
+    {
     }
 
     public function import(array $rawData, Artist $artist)

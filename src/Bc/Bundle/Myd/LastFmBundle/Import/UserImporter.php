@@ -4,7 +4,7 @@ namespace Bc\Bundle\Myd\LastFmBundle\Import;
 
 use Bc\Bundle\Myd\MusicBundle\Model\UserManagerInterface;
 
-class UserImporter
+class UserImporter implements ImporterInterface
 {
     /** @var array */
     private $cache;
@@ -15,6 +15,10 @@ class UserImporter
     public function __construct(UserManagerInterface $userManager)
     {
         $this->userManager = $userManager;
+    }
+
+    public function setFactory(ImportFactory $factory)
+    {
     }
 
     public function import($username)

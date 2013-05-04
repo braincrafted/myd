@@ -21,16 +21,28 @@ class ImportFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->container = m::mock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $artistImporter = m::mock('Bc\Bundle\Myd\LastFmBundle\Import\ArtistImporter');
+        $artistImporter->shouldReceive('setFactory')->withAnyArgs()->once();
+
+        $albumImporter = m::mock('Bc\Bundle\Myd\LastFmBundle\Import\AlbumImporter');
+        $albumImporter->shouldReceive('setFactory')->withAnyArgs()->once();
+
+        $trackImporter = m::mock('Bc\Bundle\Myd\LastFmBundle\Import\TrackImporter');
+        $trackImporter->shouldReceive('setFactory')->withAnyArgs()->once();
+
+        $trackPlayImporter = m::mock('Bc\Bundle\Myd\LastFmBundle\Import\TrackPlayImporter');
+        $trackPlayImporter->shouldReceive('setFactory')->withAnyArgs()->once();
+
+        $userImporter = m::mock('Bc\Bundle\Myd\LastFmBundle\Import\UserImporter');
+        $userImporter->shouldReceive('setFactory')->withAnyArgs()->once();
 
         $this->factory = new ImportFactory(array(
-            'artist_importer'       => 'Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockArtistImporter',
-            'album_importer'        => 'Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockAlbumImporter',
-            'track_importer'        => 'Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockTrackImporter',
-            'track_play_importer'   => 'Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockTrackPlayImporter',
-            'user_importer'         => 'Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockUserImporter'
+            'artist'       => $artistImporter,
+            'album'        => $albumImporter,
+            'track'        => $trackImporter,
+            'track_play'   => $trackPlayImporter,
+            'user'         => $userImporter
         ));
-        $this->factory->setContainer($this->container);
     }
 
     public function tearDown()
@@ -42,146 +54,134 @@ class ImportFactoryTest extends \PHPUnit_Framework_TestCase
      * Tests {@see ImportFactory::getArtistImporter()}.
      *
      * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::__construct()
-     * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::setContainer()
      * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::getArtistImporter()
      */
     public function testGetArtistImporter()
     {
-        $this->container
-            ->shouldReceive('get')
-            ->with('bc_myd_music.artist_manager')
-            ->once()
-            ->andReturn(new \stdClass());
+        $this->assertInstanceOf(
+            'Bc\Bundle\Myd\LastFmBundle\Import\ArtistImporter',
+            $this->factory->getArtistImporter()
+        );
+    }
 
-        $importer = $this->factory->getArtistImporter();
-        $this->assertInstanceOf('Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockArtistImporter', $importer);
-        $this->assertSame($importer, $this->factory->getArtistImporter());
+    /**
+     * Tests {@see ImportFactory::getArtistImporter()} when the service does not exist.
+     *
+     * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::getArtistImporter()
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testGetArtistImporter_Exception()
+    {
+        $factory = new ImportFactory(array());
+        $factory->getArtistImporter();
     }
 
     /**
      * Tests {@see ImportFactory::getAlbumImporter()}.
      *
      * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::__construct()
-     * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::setContainer()
      * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::getAlbumImporter()
      */
     public function testGetAlbumImporter()
     {
-        $this->container
-            ->shouldReceive('get')
-            ->with('bc_myd_music.album_manager')
-            ->once()
-            ->andReturn(new \stdClass());
+        $this->assertInstanceOf(
+            'Bc\Bundle\Myd\LastFmBundle\Import\AlbumImporter',
+            $this->factory->getAlbumImporter()
+        );
+    }
 
-        $importer = $this->factory->getAlbumImporter();
-        $this->assertInstanceOf('Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockAlbumImporter', $importer);
-        $this->assertSame($importer, $this->factory->getAlbumImporter());
+    /**
+     * Tests {@see ImportFactory::getAlbumImporter()} when the service does not exists.
+     *
+     * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::getAlbumImporter()
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testGetAlbumImporter_Exception()
+    {
+        $factory = new ImportFactory(array());
+        $factory->getAlbumImporter();
     }
 
     /**
      * Tests {@see ImportFactory::getTrackImporter()}.
      *
      * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::__construct()
-     * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::setContainer()
      * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::getTrackImporter()
      */
     public function testGetTrackImporter()
     {
-        $this->container
-            ->shouldReceive('get')
-            ->with('bc_myd_music.track_manager')
-            ->once()
-            ->andReturn(new \stdClass());
+        $this->assertInstanceOf(
+            'Bc\Bundle\Myd\LastFmBundle\Import\TrackImporter',
+            $this->factory->getTrackImporter()
+        );
+    }
 
-        $importer = $this->factory->getTrackImporter();
-        $this->assertInstanceOf('Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockTrackImporter', $importer);
-        $this->assertSame($importer, $this->factory->getTrackImporter());
+    /**
+     * Tests {@see ImportFactory::getTrackImporter()} when the service does not exist.
+     *
+     * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::getTrackImporter()
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testGetTrackImporter_Exception()
+    {
+        $factory = new ImportFactory(array());
+        $factory->getTrackImporter();
     }
 
     /**
      * Tests {@see ImportFactory::getTrackPlayImporter()}.
      *
      * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::__construct()
-     * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::setContainer()
      * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::getTrackPlayImporter()
      */
     public function testGetTrackPlayImporter()
     {
-        $this->container
-            ->shouldReceive('get')
-            ->with('bc_lastfm.client')
-            ->once()
-            ->andReturn(new \stdClass());
+        $this->assertInstanceOf(
+            'Bc\Bundle\Myd\LastFmBundle\Import\TrackPlayImporter',
+            $this->factory->getTrackPlayImporter()
+        );
+    }
 
-        $this->container
-            ->shouldReceive('get')
-            ->with('bc_myd_lastfm.import.factory')
-            ->once()
-            ->andReturn(new \stdClass());
-
-        $this->container
-            ->shouldReceive('get')
-            ->with('bc_myd_music.track_play_manager')
-            ->once()
-            ->andReturn(new \stdClass());
-
-        $importer = $this->factory->getTrackPlayImporter();
-        $this->assertInstanceOf('Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockTrackPlayImporter', $importer);
-        $this->assertSame($importer, $this->factory->getTrackPlayImporter());
+    /**
+     * Tests {@see ImportFactory::getTrackPlayImporter()} when the service does not exist.
+     *
+     * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::getTrackPlayImporter()
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testGetTrackPlayImporter_Excetion()
+    {
+        $factory = new ImportFactory(array());
+        $factory->getTrackPlayImporter();
     }
 
     /**
      * Tests {@see ImportFactory::getUserImporter()}.
      *
      * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::__construct()
-     * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::setContainer()
      * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::getUserImporter()
      */
     public function testGetUserImporter()
     {
-        $this->container
-            ->shouldReceive('get')
-            ->with('bc_myd_lastfm.user_manager')
-            ->once()
-            ->andReturn(new \stdClass());
-
-        $importer = $this->factory->getUserImporter();
-        $this->assertInstanceOf('Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockUserImporter', $importer);
-        $this->assertSame($importer, $this->factory->getUserImporter());
+        $this->assertInstanceOf(
+            'Bc\Bundle\Myd\LastFmBundle\Import\UserImporter',
+            $this->factory->getUserImporter()
+        );
     }
-}
 
-class MockArtistImporter
-{
-    public function __construct($am)
+    /**
+     * Tests {@see ImportFactory::getUserImporter()} when the service does not exist.
+     *
+     * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::getUserImporter()
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testGetUserImporter_Exception()
     {
-    }
-}
-
-class MockAlbumImporter
-{
-    public function __construct($am)
-    {
-    }
-}
-
-class MockTrackImporter
-{
-    public function __construct($tm)
-    {
-    }
-}
-
-class MockTrackPlayImporter
-{
-    public function __construct($c, $f, $tpm)
-    {
-    }
-}
-
-class MockUserImporter
-{
-    public function __construct($um)
-    {
+        $factory = new ImportFactory(array());
+        $factory->getUserImporter();
     }
 }

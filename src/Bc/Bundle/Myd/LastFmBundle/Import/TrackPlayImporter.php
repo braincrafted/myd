@@ -3,15 +3,12 @@
 namespace Bc\Bundle\Myd\LastFmBundle\Import;
 
 use Bc\Bundle\LastFmBundle\Client;
-use Bc\Bundle\Myd\MusicBundle\Entity\Artist;
-use Bc\Bundle\Myd\MusicBundle\Entity\Album;
+
 use Bc\Bundle\Myd\MusicBundle\Entity\Track;
-use Bc\Bundle\Myd\MusicBundle\Entity\TrackManager;
 use Bc\Bundle\Myd\MusicBundle\Entity\TrackPlayManager;
-use Bc\Bundle\Myd\MusicBundle\Model\UserManagerInterface;
 use Bc\Bundle\Myd\MusicBundle\Model\UserInterface;
 
-class TrackPlayImporter
+class TrackPlayImporter implements ImporterInterface
 {
     /** @var Client */
     private $client;
@@ -28,11 +25,17 @@ class TrackPlayImporter
     /** @var array */
     private $trackCache = array();
 
-    public function __construct(Client $client, ImportFactory $factory, TrackPlayManager $trackPlayManager)
+    public function __construct(Client $client, TrackPlayManager $trackPlayManager)
     {
         $this->client               = $client;
-        $this->factory              = $factory;
         $this->trackPlayManager     = $trackPlayManager;
+    }
+
+    public function setFactory(ImportFactory $factory)
+    {
+        $this->factory = $factory;
+
+        return $this;
     }
 
     public function import(array $parameters)

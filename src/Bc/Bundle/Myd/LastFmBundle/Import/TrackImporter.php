@@ -6,7 +6,7 @@ use Bc\Bundle\Myd\MusicBundle\Entity\TrackManager;
 use Bc\Bundle\Myd\MusicBundle\Entity\Artist;
 use Bc\Bundle\Myd\MusicBundle\Entity\Album;
 
-class TrackImporter
+class TrackImporter implements ImporterInterface
 {
     /** @var array */
     private $cache;
@@ -17,6 +17,10 @@ class TrackImporter
     public function __construct(TrackManager $trackManager)
     {
         $this->trackManager = $trackManager;
+    }
+
+    public function setFactory(ImportFactory $factory)
+    {
     }
 
     public function import(array $rawData, Album $album, Artist $artist)

@@ -2,93 +2,66 @@
 
 namespace Bc\Bundle\Myd\LastFmBundle\Import;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
-class ImportFactory implements ContainerAwareInterface
+class ImportFactory
 {
-    /** @var ContainerInterface */
-    private $container;
-
-    /** @var ArtistImporter */
-    private $artistImporter;
-
-    /** @var AlbumImporter */
-    private $albumImporter;
-
-    /** @var TrackImporter */
-    private $trackImporter;
-
-    /** @var TrackPlayImporter */
-    private $trackPlayImporter;
-
-    /** @var UserImporter */
-    private $userImporter;
-
     /** @var array */
-    private $classes;
+    private $importers;
 
-    public function __construct(array $classes)
+    public function __construct(array $importers)
     {
-        $this->classes = $classes;
-    }
+        foreach ($importers as $importer) {
+            if (!$importer instanceof ImporterInterface) {
+                throw new \InvalidArgumentException('Importers must implement ImporterInterface.');
+            }
 
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
+            $importer->setFactory($this);
+        }
+
+        $this->importers = $importers;
     }
 
     public function getArtistImporter()
     {
-        if (!$this->artistImporter) {
-            $class = $this->classes['artist_importer'];
-            $this->artistImporter = new $class($this->container->get('bc_myd_music.artist_manager'));
+        if (!isset($this->importers['artist'])) {
+            throw new \InvalidArgumentException('There is no service to import artists.');
         }
 
-        return $this->artistImporter;
+        return $this->importers['artist'];
     }
 
     public function getAlbumImporter()
     {
-        if (!$this->albumImporter) {
-            $class = $this->classes['album_importer'];
-            $this->albumImporter = new $class($this->container->get('bc_myd_music.album_manager'));
+        if (!isset($this->importers['album'])) {
+            throw new \InvalidArgumentException('There is no service to import albums.');
         }
 
-        return $this->albumImporter;
+        return $this->importers['album'];
     }
 
     public function getTrackImporter()
     {
-        if (!$this->trackImporter) {
-            $class = $this->classes['track_importer'];
-            $this->trackImporter = new $class($this->container->get('bc_myd_music.track_manager'));
+        if (!isset($this->importers['track'])) {
+            throw new \InvalidArgumentException('There is no service to import tracks.');
         }
 
-        return $this->trackImporter;
+        return $this->importers['track'];
     }
 
     public function getTrackPlayImporter()
     {
-        if (!$this->trackPlayImporter) {
-            $class = $this->classes['track_play_importer'];
-            $this->trackPlayImporter = new $class(
-                $this->container->get('bc_lastfm.client'),
-                $this->container->get('bc_myd_lastfm.import.factory'),
-                $this->container->get('bc_myd_music.track_play_manager')
-            );
+        if (!isset($this->importers['track_play'])) {
+            throw new \InvalidArgumentException('There is no service to import track plays.');
         }
 
-        return $this->trackPlayImporter;
+        return $this->importers['track_play'];
     }
 
     public function getUserImporter()
     {
-        if (!$this->userImporter) {
-            $class = $this->classes['user_importer'];
-            $this->userImporter = new $class($this->container->get('bc_myd_lastfm.user_manager'));
+        if (!isset($this->importers['user'])) {
+            throw new \InvalidArgumentException('There is no service to import users.');
         }
 
-        return $this->userImporter;
+        return $this->importers['user'];
     }
 }
