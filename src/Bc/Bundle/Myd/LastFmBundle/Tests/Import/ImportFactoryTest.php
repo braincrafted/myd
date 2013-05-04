@@ -24,10 +24,11 @@ class ImportFactoryTest extends \PHPUnit_Framework_TestCase
         $this->container = m::mock('Symfony\Component\DependencyInjection\ContainerInterface');
 
         $this->factory = new ImportFactory(array(
-            'artist_importer'   => 'Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockArtistImporter',
-            'album_importer'    => 'Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockAlbumImporter',
-            'track_importer'    => 'Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockTrackImporter',
-            'user_importer'    => 'Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockUserImporter'
+            'artist_importer'       => 'Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockArtistImporter',
+            'album_importer'        => 'Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockAlbumImporter',
+            'track_importer'        => 'Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockTrackImporter',
+            'track_play_importer'   => 'Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockTrackPlayImporter',
+            'user_importer'         => 'Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockUserImporter'
         ));
         $this->factory->setContainer($this->container);
     }
@@ -98,6 +99,38 @@ class ImportFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests {@see ImportFactory::getTrackPlayImporter()}.
+     *
+     * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::__construct()
+     * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::setContainer()
+     * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::getTrackPlayImporter()
+     */
+    public function testGetTrackPlayImporter()
+    {
+        $this->container
+            ->shouldReceive('get')
+            ->with('bc_lastfm.client')
+            ->once()
+            ->andReturn(new \stdClass());
+
+        $this->container
+            ->shouldReceive('get')
+            ->with('bc_myd_lastfm.import.factory')
+            ->once()
+            ->andReturn(new \stdClass());
+
+        $this->container
+            ->shouldReceive('get')
+            ->with('bc_myd_music.track_play_manager')
+            ->once()
+            ->andReturn(new \stdClass());
+
+        $importer = $this->factory->getTrackPlayImporter();
+        $this->assertInstanceOf('Bc\Bundle\Myd\LastFmBundle\Tests\Import\MockTrackPlayImporter', $importer);
+        $this->assertSame($importer, $this->factory->getTrackPlayImporter());
+    }
+
+    /**
      * Tests {@see ImportFactory::getUserImporter()}.
      *
      * @covers Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory::__construct()
@@ -135,6 +168,13 @@ class MockAlbumImporter
 class MockTrackImporter
 {
     public function __construct($tm)
+    {
+    }
+}
+
+class MockTrackPlayImporter
+{
+    public function __construct($c, $f, $tpm)
     {
     }
 }

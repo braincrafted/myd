@@ -2,13 +2,6 @@ services:
     bc_myd_lastfm.import.factory:
         class: Bc\Bundle\Myd\LastFmBundle\Import\ImportFactory
         arguments:
-            - { "artist_importer": Bc\Bundle\Myd\LastFmBundle\Import\ArtistImporter, "album_importer": Bc\Bundle\Myd\LastFmBundle\Import\AlbumImporter, "track_importer": Bc\Bundle\Myd\LastFmBundle\Import\TrackImporter, "user_importer": Bc\Bundle\Myd\LastFmBundle\Import\UserImporter }
+            - { "artist_importer": Bc\Bundle\Myd\LastFmBundle\Import\ArtistImporter, "album_importer": Bc\Bundle\Myd\LastFmBundle\Import\AlbumImporter, "track_importer": Bc\Bundle\Myd\LastFmBundle\Import\TrackImporter, "track_play_importer": Bc\Bundle\Myd\LastFmBundle\Import\TrackPlayImporter, "user_importer": Bc\Bundle\Myd\LastFmBundle\Import\UserImporter }
         calls:
             - [ setContainer, [ "@service_container" ] ]
-
-    bc_myd_lastfm.import.recent_tracks:
-        class: Bc\Bundle\Myd\LastFmBundle\Import\RecentTracksImporter
-        arguments:
-            - @bc_lastfm.client
-            - @bc_myd_lastfm.import.factory
-            - @bc_myd_music.track_play_manager

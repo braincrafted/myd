@@ -11,7 +11,7 @@ use Bc\Bundle\Myd\MusicBundle\Entity\TrackPlayManager;
 use Bc\Bundle\Myd\MusicBundle\Model\UserManagerInterface;
 use Bc\Bundle\Myd\MusicBundle\Model\UserInterface;
 
-class RecentTracksImporter
+class TrackPlayImporter
 {
     /** @var Client */
     private $client;
@@ -30,9 +30,9 @@ class RecentTracksImporter
 
     public function __construct(Client $client, ImportFactory $factory, TrackPlayManager $trackPlayManager)
     {
-        $this->client           = $client;
-        $this->factory = $factory;
-        $this->trackPlayManager = $trackPlayManager;
+        $this->client               = $client;
+        $this->factory              = $factory;
+        $this->trackPlayManager     = $trackPlayManager;
     }
 
     public function import(array $parameters)

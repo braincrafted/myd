@@ -19,6 +19,9 @@ class ImportFactory implements ContainerAwareInterface
     /** @var TrackImporter */
     private $trackImporter;
 
+    /** @var TrackPlayImporter */
+    private $trackPlayImporter;
+
     /** @var UserImporter */
     private $userImporter;
 
@@ -63,6 +66,20 @@ class ImportFactory implements ContainerAwareInterface
         }
 
         return $this->trackImporter;
+    }
+
+    public function getTrackPlayImporter()
+    {
+        if (!$this->trackPlayImporter) {
+            $class = $this->classes['track_play_importer'];
+            $this->trackPlayImporter = new $class(
+                $this->container->get('bc_lastfm.client'),
+                $this->container->get('bc_myd_lastfm.import.factory'),
+                $this->container->get('bc_myd_music.track_play_manager')
+            );
+        }
+
+        return $this->trackPlayImporter;
     }
 
     public function getUserImporter()

@@ -21,18 +21,9 @@ class ImportCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $importer = $this->getContainer()->get('bc_myd_lastfm.import.recent_tracks');
+        $importer = $this->getContainer()->get('bc_myd_lastfm.import.factory')->getTrackPlayImporter();
         $importer->import(array(
             'user' => $input->getArgument('username')
         ));
-        // $client = $this->getContainer()->get('bc_lastfm.client');
-
-        // $command = $client->getCommand('user.getRecentTracks', array(
-        //     'user'      => $input->getArgument('username'),
-        //     'format'    => 'json'
-        // ));
-
-        // $responseModel = $client->execute($command);
-        // print_r($responseModel);
     }
 }
