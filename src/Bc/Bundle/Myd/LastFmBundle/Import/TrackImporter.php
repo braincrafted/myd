@@ -27,17 +27,21 @@ class TrackImporter implements ImporterInterface
     {
         $data = array(
             'name'  => $rawData['name'],
-            'mbId'  => $rawData['mbid']
+            'mbid'  => $rawData['mbid']
         );
 
         $track = null;
 
-        if (isset($this->cache[$data['mbId']])) {
-            $track = $this->cache[$data['mbId']];
+        if (isset($this->cache[$data['mbid']])) {
+            $track = $this->cache[$data['mbid']];
         }
 
-        if (!$track) {
-            $track = $this->trackManager->findTrackByMbId($data['mbId']);
+        if (!$track && $data['mbid']) {
+            $track = $this->trackManager->findTrackByMbid($data['mbid']);
+        }
+
+        if (!$track && !$data['mbid']) {
+            $track = $this->trackManager->findTrackByAlbumAndName($album, $data['name']);
         }
 
         if (!$track) {
@@ -47,7 +51,7 @@ class TrackImporter implements ImporterInterface
             $this->trackManager->updateTrack($track, false);
         }
 
-        $this->cache[$track->getMbId()] = $track;
+        $this->cache[$track->getMbid()] = $track;
 
         return $track;
     }
@@ -55,5 +59,6 @@ class TrackImporter implements ImporterInterface
     public function flush()
     {
         $this->trackManager->flush();
+        $this->cache = array();
     }
 }

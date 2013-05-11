@@ -38,9 +38,9 @@ class TrackPlayManager
         return $this->repository->findAll();
     }
 
-    public function findTrackPlayByMbId($mbId)
+    public function findTrackPlayByMbid($mbid)
     {
-        return $this->repository->findOneBy(array('mbId' => $mbId));
+        return $this->repository->findOneBy(array('mbid' => $mbid));
     }
 
     public function updateTrackPlay(TrackPlay $trackPlay, $andFlush = true)

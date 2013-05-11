@@ -57,15 +57,15 @@ class ArtistTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests {@see setMbId()} and {@see getMbId()}.
+     * Tests {@see setMbid()} and {@see getMbid()}.
      *
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Artist::setMbId()
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Artist::getMbId()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Artist::setMbid()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Artist::getMbid()
      */
-    public function testSetMbId_GetMbId()
+    public function testSetMbid_GetMbid()
     {
-        $this->artist->setMbId('ABCDEF');
-        $this->assertEquals('ABCDEF', $this->artist->getMbId());
+        $this->artist->setMbid('ABCDEF');
+        $this->assertEquals('ABCDEF', $this->artist->getMbid());
     }
 
     /**

@@ -30,8 +30,8 @@ class TrackManager
             $track->setName($data['name']);
         }
 
-        if (isset($data['mbId'])) {
-            $track->setMbId($data['mbId']);
+        if (isset($data['mbid'])) {
+            $track->setMbid($data['mbid']);
         }
 
         if (isset($data['duration'])) {
@@ -46,9 +46,14 @@ class TrackManager
         return $this->repository->findAll();
     }
 
-    public function findTrackByMbId($mbId)
+    public function findTrackByMbid($mbid)
     {
-        return $this->repository->findOneBy(array('mbId' => $mbId));
+        return $this->repository->findOneBy(array('mbid' => $mbid));
+    }
+
+    public function findTrackByAlbumAndName(Album $album, $name)
+    {
+        return $this->repository->findOneBy(array('album' => $album, 'name' => $name));
     }
 
     public function updateTrack(Track $artist, $andFlush = true)

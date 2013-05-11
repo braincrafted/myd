@@ -26,17 +26,21 @@ class AlbumImporter implements ImporterInterface
     {
         $data = array(
             'name' => $rawData['#text'],
-            'mbId' => $rawData['mbid']
+            'mbid' => $rawData['mbid']
         );
 
         $album = null;
 
-        if (isset($this->cache[$data['mbId']])) {
-            $album = $this->cache[$data['mbId']];
+        if (isset($this->cache[$data['mbid']])) {
+            $album = $this->cache[$data['mbid']];
         }
 
-        if (!$album) {
-            $album = $this->albumManager->findAlbumByMbId($data['mbId']);
+        if (!$album && $data['mbid']) {
+            $album = $this->albumManager->findAlbumByMbid($data['mbid']);
+        }
+
+        if (!$album && !$data['mbid']) {
+            $album = $this->albumManager->findAlbumByArtistAndName($artist, $data['name']);
         }
 
         if (!$album) {
@@ -45,7 +49,7 @@ class AlbumImporter implements ImporterInterface
             $this->albumManager->updateAlbum($album, false);
         }
 
-        $this->cache[$album->getMbId()] = $album;
+        $this->cache[$album->getMbid()] = $album;
 
         return $album;
     }
@@ -53,5 +57,6 @@ class AlbumImporter implements ImporterInterface
     public function flush()
     {
         $this->albumManager->flush();
+        $this->cache = array();
     }
 }

@@ -46,7 +46,7 @@ class TrackImporterTest extends \PHPUnit_Framework_TestCase
 
         $track = m::mock('Bc\Bundle\Myd\MusicBundle\Entity\Track');
         $track
-            ->shouldReceive('getMbId')
+            ->shouldReceive('getMbid')
             ->withNoArgs()
             ->once()
             ->andReturn('ca4a7e9c');
@@ -60,14 +60,14 @@ class TrackImporterTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->trackManager
-            ->shouldReceive('findTrackByMbId')
+            ->shouldReceive('findTrackByMbid')
             ->with('ca4a7e9c')
             ->once()
             ->andReturn(null);
 
         $this->trackManager
             ->shouldReceive('createTrack')
-            ->with(array('name' => 'Angels', 'mbId' => 'ca4a7e9c'))
+            ->with(array('name' => 'Angels', 'mbid' => 'ca4a7e9c'))
             ->once()
             ->andReturn($track);
         $this->trackManager
@@ -102,7 +102,7 @@ class TrackImporterTest extends \PHPUnit_Framework_TestCase
 
         $track = m::mock('Bc\Bundle\Myd\MusicBundle\Entity\Track');
         $track
-            ->shouldReceive('getMbId')
+            ->shouldReceive('getMbid')
             ->withNoArgs()
             ->once()
             ->andReturn('ca4a7e9c');
@@ -114,7 +114,7 @@ class TrackImporterTest extends \PHPUnit_Framework_TestCase
             ->never();
 
         $this->trackManager
-            ->shouldReceive('findTrackByMbId')
+            ->shouldReceive('findTrackByMbid')
             ->with('ca4a7e9c')
             ->once()
             ->andReturn($track);
@@ -154,7 +154,7 @@ class TrackImporterTest extends \PHPUnit_Framework_TestCase
         /** Add Track to cache */
         $track = m::mock('Bc\Bundle\Myd\MusicBundle\Entity\Track');
         $track
-            ->shouldReceive('getMbId')
+            ->shouldReceive('getMbid')
             ->withNoArgs()
             ->twice()
             ->andReturn('ca4a7e9c');
@@ -166,7 +166,7 @@ class TrackImporterTest extends \PHPUnit_Framework_TestCase
             ->never();
 
         $this->trackManager
-            ->shouldReceive('findTrackByMbId')
+            ->shouldReceive('findTrackByMbid')
             ->with('ca4a7e9c')
             ->once()
             ->andReturn($track);

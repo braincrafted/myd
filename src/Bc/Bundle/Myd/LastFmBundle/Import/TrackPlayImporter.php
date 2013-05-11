@@ -19,11 +19,8 @@ class TrackPlayImporter implements ImporterInterface
     /** @var TrackPlayManager */
     private $trackPlayManager;
 
-    /** @var array */
-    private $albumCache = array();
-
-    /** @var array */
-    private $trackCache = array();
+    /** @var callback */
+    private $importCallback;
 
     public function __construct(Client $client, TrackPlayManager $trackPlayManager)
     {
@@ -38,33 +35,46 @@ class TrackPlayImporter implements ImporterInterface
         return $this;
     }
 
-    public function import(array $parameters)
+    public function setImportCallback($importCallback)
+    {
+        $this->importCallback = $importCallback;
+        return $this;
+    }
+
+    public function import(array $parameters, $limit = null)
     {
         if (!isset($parameters['user'])) {
             throw new \InvalidArgumentException('The parameter "user" must be set.');
         }
 
+        // Start with page 1
+        $parameters['page'] = 1;
+
         // Import user (or retrieve User object from database if it does not exist)
         $user = $this->factory->getUserImporter()->import($parameters['user']);
 
-        $command = $this->client->getCommand('user.getRecentTracks', array(
-            'user'      => $parameters['user'],
-            'page'      => isset($parameters['page']) ? $parameters['page'] : 1,
-            'format'    => 'json'
-        ));
-        $response = $this->client->execute($command);
+        $importCount = 0;
 
-        foreach ($response['recenttracks']['track'] as $trackPlayData) {
-            $artist = $this->factory->getArtistImporter()->import($trackPlayData['artist']);
-            $album  = $this->factory->getAlbumImporter()->import($trackPlayData['album'], $artist);
-            $track  = $this->factory->getTrackImporter()->import($trackPlayData, $album, $artist);
-            $this->importTrackPlay($trackPlayData, $track, $user);
-        }
+        do {
+            $response = $this->fetchPage($parameters);
+            $this->savePage($response['recenttracks']['track'], $user);
 
-        $this->factory->getArtistImporter()->flush();
-        $this->factory->getAlbumImporter()->flush();
-        $this->factory->getTrackImporter()->flush();
-        $this->trackPlayManager->flush();
+            $options = $response['recenttracks']['@attr'];
+            if ($this->importCallback) {
+                call_user_func($this->importCallback, '', $options);
+            }
+
+            // Wait a little bit before we import the next page.
+            usleep(500000);
+
+            // Increment page
+            $parameters['page']++;
+            $importCount += 200;
+
+            if ($limit > 0 && $importCount >= $limit) {
+                break;
+            }
+        } while ($options['page'] < $options['totalPages']);
     }
 
     protected function importTrackPlay(array $rawData, Track $track, UserInterface $user)
@@ -82,5 +92,38 @@ class TrackPlayImporter implements ImporterInterface
         $trackPlay->setUser($user);
 
         $this->trackPlayManager->updateTrackPlay($trackPlay, false);
+    }
+
+    private function fetchPage(array $parameters)
+    {
+        $command = $this->client->getCommand('user.getRecentTracks', array(
+            'user'      => $parameters['user'],
+            'page'      => $parameters['page'],
+            'limit'     => 200,
+            'format'    => 'json'
+        ));
+        $response = $this->client->execute($command);
+
+        if (!isset($response['recenttracks']['track'])) {
+            throw new \RuntimeException(sprintf('Received invalid response from last.fm: %s', print_r($response, true)));
+        }
+
+        return $response;
+    }
+
+    private function savePage(array $rawTrackPlays, UserInterface $user)
+    {
+        foreach ($rawTrackPlays as $rawTrackPlay) {
+            $artist = $this->factory->getArtistImporter()->import($rawTrackPlay['artist']);
+            $album  = $this->factory->getAlbumImporter()->import($rawTrackPlay['album'], $artist);
+            $track  = $this->factory->getTrackImporter()->import($rawTrackPlay, $album, $artist);
+            $this->importTrackPlay($rawTrackPlay, $track, $user);
+        }
+
+        $this->factory->getArtistImporter()->flush();
+        $this->factory->getAlbumImporter()->flush();
+        $this->factory->getTrackImporter()->flush();
+        $this->trackPlayManager->flush();
+        $this->cache = array();
     }
 }

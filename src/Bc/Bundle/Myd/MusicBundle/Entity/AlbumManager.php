@@ -30,8 +30,8 @@ class AlbumManager
             $album->setName($data['name']);
         }
 
-        if (isset($data['mbId'])) {
-            $album->setMbId($data['mbId']);
+        if (isset($data['mbid'])) {
+            $album->setMbid($data['mbid']);
         }
 
         if (isset($data['releaseDate'])) {
@@ -46,9 +46,14 @@ class AlbumManager
         return $this->repository->findAll();
     }
 
-    public function findAlbumByMbId($mbId)
+    public function findAlbumByMbid($mbid)
     {
-        return $this->repository->findOneBy(array('mbId' => $mbId));
+        return $this->repository->findOneBy(array('mbid' => $mbid));
+    }
+
+    public function findAlbumByArtistAndName(Artist $artist, $name)
+    {
+        return $this->repository->findOneBy(array('artist' => $artist, 'name' => $name));
     }
 
     public function updateAlbum(Album $artist, $andFlush = true)

@@ -57,15 +57,15 @@ class TrackTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests {@see Track::setMbId()} and {@see Track::getMbId()}.
+     * Tests {@see Track::setMbid()} and {@see Track::getMbid()}.
      *
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::setMbId()
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::getMbId()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::setMbid()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Track::getMbid()
      */
-    public function testSetMbId_GetMbId()
+    public function testSetMbid_GetMbid()
     {
-        $this->track->setMbId('ABCDEF');
-        $this->assertEquals('ABCDEF', $this->track->getMbId());
+        $this->track->setMbid('ABCDEF');
+        $this->assertEquals('ABCDEF', $this->track->getMbid());
     }
 
     /**

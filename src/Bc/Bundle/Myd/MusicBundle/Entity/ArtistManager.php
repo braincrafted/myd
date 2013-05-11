@@ -30,8 +30,8 @@ class ArtistManager
             $artist->setName($data['name']);
         }
 
-        if (isset($data['mbId'])) {
-            $artist->setMbId($data['mbId']);
+        if (isset($data['mbid'])) {
+            $artist->setMbid($data['mbid']);
         }
 
         return $artist;
@@ -42,9 +42,14 @@ class ArtistManager
         return $this->repository->findAll();
     }
 
-    public function findArtistByMbId($mbId)
+    public function findArtistByMbid($mbid)
     {
-        return $this->repository->findOneBy(array('mbId' => $mbId));
+        return $this->repository->findOneBy(array('mbid' => $mbid));
+    }
+
+    public function findArtistByName($name)
+    {
+        return $this->repository->findOneBy(array('name' => $name));
     }
 
     public function updateArtist(Artist $artist, $andFlush = true)

@@ -43,20 +43,20 @@ class ArtistImporterTest extends \PHPUnit_Framework_TestCase
     {
         $artist = m::mock('Bc\Bundle\Myd\MusicBundle\Entity\Artist');
         $artist
-            ->shouldReceive('getMbId')
+            ->shouldReceive('getMbid')
             ->withNoArgs()
             ->once()
             ->andReturn('7cd2d860');
 
         $this->artistManager
-            ->shouldReceive('findArtistByMbId')
+            ->shouldReceive('findArtistByMbid')
             ->with('7cd2d860')
             ->once()
             ->andReturn(null);
 
         $this->artistManager
             ->shouldReceive('createArtist')
-            ->with(array('name' => 'The Thermals', 'mbId' => '7cd2d860'))
+            ->with(array('name' => 'The Thermals', 'mbid' => '7cd2d860'))
             ->once()
             ->andReturn($artist);
         $this->artistManager
@@ -84,13 +84,13 @@ class ArtistImporterTest extends \PHPUnit_Framework_TestCase
     {
         $artist = m::mock('Bc\Bundle\Myd\MusicBundle\Entity\Artist');
         $artist
-            ->shouldReceive('getMbId')
+            ->shouldReceive('getMbid')
             ->withNoArgs()
             ->once()
             ->andReturn('7cd2d860');
 
         $this->artistManager
-            ->shouldReceive('findArtistByMbId')
+            ->shouldReceive('findArtistByMbid')
             ->with('7cd2d860')
             ->once()
             ->andReturn($artist);
@@ -123,13 +123,13 @@ class ArtistImporterTest extends \PHPUnit_Framework_TestCase
         /** Add Artist to cache */
         $artist = m::mock('Bc\Bundle\Myd\MusicBundle\Entity\Artist');
         $artist
-            ->shouldReceive('getMbId')
+            ->shouldReceive('getMbid')
             ->withNoArgs()
             ->twice()
             ->andReturn('7cd2d860');
 
         $this->artistManager
-            ->shouldReceive('findArtistByMbId')
+            ->shouldReceive('findArtistByMbid')
             ->with('7cd2d860')
             ->once()
             ->andReturn($artist);

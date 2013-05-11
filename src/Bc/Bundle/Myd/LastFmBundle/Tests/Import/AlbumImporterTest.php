@@ -45,7 +45,7 @@ class AlbumImporterTest extends \PHPUnit_Framework_TestCase
 
         $album = m::mock('Bc\Bundle\Myd\MusicBundle\Entity\Album');
         $album
-            ->shouldReceive('getMbId')
+            ->shouldReceive('getMbid')
             ->withNoArgs()
             ->once()
             ->andReturn('aef44e12');
@@ -55,14 +55,14 @@ class AlbumImporterTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->albumManager
-            ->shouldReceive('findAlbumByMbId')
+            ->shouldReceive('findAlbumByMbid')
             ->with('aef44e12')
             ->once()
             ->andReturn(null);
 
         $this->albumManager
             ->shouldReceive('createAlbum')
-            ->with(array('name' => 'Coexist', 'mbId' => 'aef44e12'))
+            ->with(array('name' => 'Coexist', 'mbid' => 'aef44e12'))
             ->once()
             ->andReturn($album);
         $this->albumManager
@@ -95,7 +95,7 @@ class AlbumImporterTest extends \PHPUnit_Framework_TestCase
 
         $album = m::mock('Bc\Bundle\Myd\MusicBundle\Entity\Album');
         $album
-            ->shouldReceive('getMbId')
+            ->shouldReceive('getMbid')
             ->withNoArgs()
             ->once()
             ->andReturn('aef44e12');
@@ -104,7 +104,7 @@ class AlbumImporterTest extends \PHPUnit_Framework_TestCase
             ->never();
 
         $this->albumManager
-            ->shouldReceive('findAlbumByMbId')
+            ->shouldReceive('findAlbumByMbid')
             ->with('aef44e12')
             ->once()
             ->andReturn($album);
@@ -142,7 +142,7 @@ class AlbumImporterTest extends \PHPUnit_Framework_TestCase
         /** Add Album to cache */
         $album = m::mock('Bc\Bundle\Myd\MusicBundle\Entity\Album');
         $album
-            ->shouldReceive('getMbId')
+            ->shouldReceive('getMbid')
             ->withNoArgs()
             ->twice()
             ->andReturn('aef44e12');
@@ -151,7 +151,7 @@ class AlbumImporterTest extends \PHPUnit_Framework_TestCase
             ->never();
 
         $this->albumManager
-            ->shouldReceive('findAlbumByMbId')
+            ->shouldReceive('findAlbumByMbid')
             ->with('aef44e12')
             ->once()
             ->andReturn($album);

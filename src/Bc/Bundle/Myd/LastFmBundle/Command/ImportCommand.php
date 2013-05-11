@@ -16,14 +16,20 @@ class ImportCommand extends ContainerAwareCommand
             ->setName('bc:myd:lastfm:import')
             ->setDescription('Import data from Last.fm')
             ->addArgument('username', InputArgument::REQUIRED, 'The last.fm username')
+            ->addOption('limit', 'l', InputOption::VALUE_REQUIRED, 'Number of tracks to import')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $importer = $this->getContainer()->get('bc_myd_lastfm.import.factory')->getTrackPlayImporter();
-        $importer->import(array(
-            'user' => $input->getArgument('username')
-        ));
+        $importer->setImportCallback(function ($message, $context) use ($input, $output) {
+            $output->writeln(sprintf('Imported %d of %d pages.', $context['page'], $context['totalPages']));
+        });
+
+        $importer->import(
+            array('user' => $input->getArgument('username')),
+            $input->getOption('limit')
+        );
     }
 }

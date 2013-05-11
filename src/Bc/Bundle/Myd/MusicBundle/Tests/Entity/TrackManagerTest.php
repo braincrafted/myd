@@ -71,12 +71,12 @@ class TrackManagerTest extends \PHPUnit_Framework_TestCase
     {
         $track = $this->manager->createTrack(array(
             'name'          => 'Angels',
-            'mbId'          => 'ca4a7e9c-97a3-4a6a-97a1-f9c6c2e8cf57',
+            'mbid'          => 'ca4a7e9c-97a3-4a6a-97a1-f9c6c2e8cf57',
             'duration'      => 360
         ));
 
         $this->assertEquals('Angels', $track->getName());
-        $this->assertEquals('ca4a7e9c-97a3-4a6a-97a1-f9c6c2e8cf57', $track->getMbId());
+        $this->assertEquals('ca4a7e9c-97a3-4a6a-97a1-f9c6c2e8cf57', $track->getMbid());
         $this->assertEquals(360, $track->getDuration());
     }
 
@@ -100,22 +100,42 @@ class TrackManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests {@see TrackManager::findTrackByMbId()}.
+     * Tests {@see TrackManager::findTrackByMbid()}.
      *
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::__construct()
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::findTrackByMbId()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::findTrackByMbid()
      */
-    public function testFindTrackByMbId()
+    public function testFindTrackByMbid()
     {
         $track = m::mock($this->class);
 
         $this->repository
             ->shouldReceive('findOneBy')
-            ->with(array('mbId' => 'abcdef'))
+            ->with(array('mbid' => 'abcdef'))
             ->once()
             ->andReturn($track);
 
-        $this->assertEquals($track, $this->manager->findTrackByMbId('abcdef'));
+        $this->assertEquals($track, $this->manager->findTrackByMbid('abcdef'));
+    }
+
+    /**
+     * Tests {@see TrackManager::findTrackByAlbumAndName()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackManager::findTrackByAlbumAndName()
+     */
+    public function testFindTrackByAlbumAndName()
+    {
+        $track = m::mock($this->class);
+        $album = m::mock('Bc\Bundle\Myd\MusicBundle\Entity\Album');
+
+        $this->repository
+            ->shouldReceive('findOneBy')
+            ->with(array('album' => $album, 'name' => 'Karma Police'))
+            ->once()
+            ->andReturn($track);
+
+        $this->assertEquals($track, $this->manager->findTrackByAlbumAndName($album, 'Karma Police'));
     }
 
     /**

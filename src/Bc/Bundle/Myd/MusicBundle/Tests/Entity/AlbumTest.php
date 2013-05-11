@@ -70,15 +70,15 @@ class AlbumTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests {@see Album::setMbId()} and {@see Album::getMbId()}.
+     * Tests {@see Album::setMbid()} and {@see Album::getMbid()}.
      *
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Album::setMbId()
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Album::getMbId()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Album::setMbid()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\Album::getMbid()
      */
-    public function testSetMbId_GetMbId()
+    public function testSetMbid_GetMbid()
     {
-        $this->album->setMbId('ABCDEF');
-        $this->assertEquals('ABCDEF', $this->album->getMbId());
+        $this->album->setMbid('ABCDEF');
+        $this->assertEquals('ABCDEF', $this->album->getMbid());
     }
 
     /**

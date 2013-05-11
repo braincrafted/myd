@@ -27,9 +27,9 @@ class Album
 
     /**
      * @var string
-     * @ORM\Column(name="mbid", type="string", length=36, unique=true)
+     * @ORM\Column(name="mbid", type="string", length=36, nullable=true)
      */
-    private $mbId;
+    private $mbid;
 
     /**
      * @var Artist
@@ -119,13 +119,13 @@ class Album
     /**
      * Sets the MBID of the album.
      *
-     * @param string $mbId The MBID
+     * @param string $mbid The MBID
      *
      * @return Album
      */
-    public function setMbId($mbId)
+    public function setMbid($mbid)
     {
-        $this->mbId = $mbId;
+        $this->mbid = $mbid;
 
         return $this;
     }
@@ -135,9 +135,9 @@ class Album
      *
      * @return string The MBID
      */
-    public function getMbId()
+    public function getMbid()
     {
-        return $this->mbId;
+        return $this->mbid;
     }
 
     /**

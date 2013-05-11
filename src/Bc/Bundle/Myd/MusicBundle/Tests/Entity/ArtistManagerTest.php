@@ -71,11 +71,11 @@ class ArtistManagerTest extends \PHPUnit_Framework_TestCase
     {
         $artist = $this->manager->createArtist(array(
             'name'  => 'The Thermals',
-            'mbId'  => '7cd2d860-c6d7-4be2-af50-57c51ee45687'
+            'mbid'  => '7cd2d860-c6d7-4be2-af50-57c51ee45687'
         ));
 
         $this->assertEquals('The Thermals', $artist->getName());
-        $this->assertEquals('7cd2d860-c6d7-4be2-af50-57c51ee45687', $artist->getMbId());
+        $this->assertEquals('7cd2d860-c6d7-4be2-af50-57c51ee45687', $artist->getMbid());
     }
 
     /**
@@ -98,22 +98,41 @@ class ArtistManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests {@see ArtistManager::findArtistByMbId()}.
+     * Tests {@see ArtistManager::findArtistByMbid()}.
      *
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::__construct()
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::findArtistByMbId()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::findArtistByMbid()
      */
-    public function testFindArtistByMbId()
+    public function testFindArtistByMbid()
     {
         $artist = m::mock($this->class);
 
         $this->repository
             ->shouldReceive('findOneBy')
-            ->with(array('mbId' => 'abcdef'))
+            ->with(array('mbid' => 'abcdef'))
             ->once()
             ->andReturn($artist);
 
-        $this->assertEquals($artist, $this->manager->findArtistByMbId('abcdef'));
+        $this->assertEquals($artist, $this->manager->findArtistByMbid('abcdef'));
+    }
+
+    /**
+     * Tests {@see ArtistManager::findArtistByName()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\ArtistManager::findArtistByName()
+     */
+    public function testFindArtistByName()
+    {
+        $artist = m::mock($this->class);
+
+        $this->repository
+            ->shouldReceive('findOneBy')
+            ->with(array('name' => 'Radiohead'))
+            ->once()
+            ->andReturn($artist);
+
+        $this->assertEquals($artist, $this->manager->findArtistByName('Radiohead'));
     }
 
     /**

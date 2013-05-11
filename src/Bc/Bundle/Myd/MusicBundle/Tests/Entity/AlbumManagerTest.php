@@ -71,12 +71,12 @@ class AlbumManagerTest extends \PHPUnit_Framework_TestCase
     {
         $album = $this->manager->createAlbum(array(
             'name'          => 'Desperate Ground',
-            'mbId'          => 'fc410ce5-f382-44ce-8619-a17fe48b5369',
+            'mbid'          => 'fc410ce5-f382-44ce-8619-a17fe48b5369',
             'releaseDate'   => new \DateTime('16 Apr 2013', new \DateTimeZone('UTC'))
         ));
 
         $this->assertEquals('Desperate Ground', $album->getName());
-        $this->assertEquals('fc410ce5-f382-44ce-8619-a17fe48b5369', $album->getMbId());
+        $this->assertEquals('fc410ce5-f382-44ce-8619-a17fe48b5369', $album->getMbid());
         $this->assertEquals('2013-04-16', $album->getReleaseDate()->format('Y-m-d'));
     }
 
@@ -100,22 +100,42 @@ class AlbumManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests {@see AlbumManager::findAlbumByMbId()}.
+     * Tests {@see AlbumManager::findAlbumByMbid()}.
      *
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::__construct()
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::findAlbumByMbId()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::findAlbumByMbid()
      */
-    public function testFindAlbumByMbId()
+    public function testFindAlbumByMbid()
     {
         $album = m::mock($this->class);
 
         $this->repository
             ->shouldReceive('findOneBy')
-            ->with(array('mbId' => 'abcdef'))
+            ->with(array('mbid' => 'abcdef'))
             ->once()
             ->andReturn($album);
 
-        $this->assertEquals($album, $this->manager->findAlbumByMbId('abcdef'));
+        $this->assertEquals($album, $this->manager->findAlbumByMbid('abcdef'));
+    }
+
+    /**
+     * Tests {@see AlbumManager::findAlbumByArtistAndName()}.
+     *
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::__construct()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\AlbumManager::findAlbumByArtistAndName()
+     */
+    public function testFindAlbumByArtistAndName()
+    {
+        $album = m::mock($this->class);
+        $artist = m::mock('Bc\Bundle\Myd\MusicBundle\Entity\Artist');
+
+        $this->repository
+            ->shouldReceive('findOneBy')
+            ->with(array('artist' => $artist, 'name' => 'Kid A'))
+            ->once()
+            ->andReturn($album);
+
+        $this->assertEquals($album, $this->manager->findAlbumByArtistAndName($artist, 'Kid A'));
     }
 
     /**

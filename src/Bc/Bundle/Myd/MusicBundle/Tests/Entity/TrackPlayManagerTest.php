@@ -95,22 +95,22 @@ class TrackPlayManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests {@see TrackPlayManager::findTrackPlayByMbId()}.
+     * Tests {@see TrackPlayManager::findTrackPlayByMbid()}.
      *
      * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackPlayManager::__construct()
-     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackPlayManager::findTrackPlayByMbId()
+     * @covers Bc\Bundle\Myd\MusicBundle\Entity\TrackPlayManager::findTrackPlayByMbid()
      */
-    public function testFindTrackPlayByMbId()
+    public function testFindTrackPlayByMbid()
     {
         $trackPlay = m::mock($this->class);
 
         $this->repository
             ->shouldReceive('findOneBy')
-            ->with(array('mbId' => 'abcdef'))
+            ->with(array('mbid' => 'abcdef'))
             ->once()
             ->andReturn($trackPlay);
 
-        $this->assertEquals($trackPlay, $this->manager->findTrackPlayByMbId('abcdef'));
+        $this->assertEquals($trackPlay, $this->manager->findTrackPlayByMbid('abcdef'));
     }
 
     /**
