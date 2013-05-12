@@ -23,7 +23,7 @@ class TrackImporter implements ImporterInterface
     {
     }
 
-    public function import(array $rawData, Album $album, Artist $artist)
+    public function import(array $rawData, $album, Artist $artist)
     {
         $data = array(
             'name'  => $rawData['name'],
@@ -32,33 +32,29 @@ class TrackImporter implements ImporterInterface
 
         $track = null;
 
-        if (isset($this->cache[$data['mbid']])) {
-            $track = $this->cache[$data['mbid']];
-        }
-
         if (!$track && $data['mbid']) {
             $track = $this->trackManager->findTrackByMbid($data['mbid']);
         }
 
-        if (!$track && !$data['mbid']) {
+        if (!$track && !$data['mbid'] && $album) {
             $track = $this->trackManager->findTrackByAlbumAndName($album, $data['name']);
         }
 
-        if (!$track) {
-            $track = $this->trackManager->createTrack($data);
-            $track->setArtist($artist);
-            $track->setAlbum($album);
-            $this->trackManager->updateTrack($track, false);
+        if (!$track && !$data['mbid'] && !$album && $artist) {
+            $track = $this->trackManager->findTrackByArtistAndName($artist, $data['name']);
         }
 
-        $this->cache[$track->getMbid()] = $track;
+        if (!$track && ($artist || $album) && ($data['mbid'] || $data['name'])) {
+            $track = $this->trackManager->createTrack($data);
+            if ($artist) {
+                $track->setArtist($artist);
+            }
+            if ($album) {
+                $track->setAlbum($album);
+            }
+            $this->trackManager->updateTrack($track);
+        }
 
         return $track;
-    }
-
-    public function flush()
-    {
-        $this->trackManager->flush();
-        $this->cache = array();
     }
 }

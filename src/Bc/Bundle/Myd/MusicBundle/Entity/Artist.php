@@ -235,4 +235,9 @@ class Artist
     {
         return $this->updatedAt;
     }
+
+    public function __toString()
+    {
+        return sprintf('Artist [#%d] %s', $this->id, $this->name);
+    }
 }

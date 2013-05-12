@@ -56,6 +56,11 @@ class TrackManager
         return $this->repository->findOneBy(array('album' => $album, 'name' => $name));
     }
 
+    public function findTrackByArtistAndName(Artist $artist, $name)
+    {
+        return $this->repository->findOneBy(array('artist' => $artist, 'name' => $name));
+    }
+
     public function updateTrack(Track $artist, $andFlush = true)
     {
         $artist->setUpdatedAt(new \DateTime(null, new \DateTimeZone('UTC')));

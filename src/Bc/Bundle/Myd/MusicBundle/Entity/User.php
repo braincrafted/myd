@@ -121,4 +121,9 @@ abstract class User implements UserInterface
     {
         return $this->updatedAt;
     }
+
+    public function __toString()
+    {
+        return sprintf('User %d', $this->id);
+    }
 }

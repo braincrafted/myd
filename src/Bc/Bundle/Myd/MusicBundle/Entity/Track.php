@@ -39,14 +39,14 @@ class Track
 
     /**
      * @var Artist
-     * @ORM\ManyToOne(targetEntity="Artist", inversedBy="tracks")
+     * @ORM\ManyToOne(targetEntity="Artist", inversedBy="tracks", cascade={"persist"})
      * @ORM\JoinColumn(name="artist_id", referencedColumnName="id")
      */
     private $artist;
 
     /**
      * @var Album
-     * @ORM\ManyToOne(targetEntity="Album", inversedBy="tracks")
+     * @ORM\ManyToOne(targetEntity="Album", inversedBy="tracks", cascade={"persist"})
      * @ORM\JoinColumn(name="album_id", referencedColumnName="id")
      */
     private $album;
@@ -293,5 +293,10 @@ class Track
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    public function __toString()
+    {
+        return sprintf('Track [#%d] %s', $this->id, $this->name);
     }
 }

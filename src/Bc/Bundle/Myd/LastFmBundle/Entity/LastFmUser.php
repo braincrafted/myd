@@ -43,4 +43,9 @@ class LastFmUser extends BaseUser
     {
         return $this->username;
     }
+
+    public function __toString()
+    {
+        return sprintf('Last.fm user %s', $this->username);
+    }
 }

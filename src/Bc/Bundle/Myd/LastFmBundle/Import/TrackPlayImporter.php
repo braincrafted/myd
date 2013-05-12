@@ -2,6 +2,9 @@
 
 namespace Bc\Bundle\Myd\LastFmBundle\Import;
 
+use Doctrine\Common\Persistence\ObjectManager;
+use Guzzle\Http\Exception\ServerErrorResponseException;
+
 use Bc\Bundle\LastFmBundle\Client;
 
 use Bc\Bundle\Myd\MusicBundle\Entity\Track;
@@ -19,13 +22,17 @@ class TrackPlayImporter implements ImporterInterface
     /** @var TrackPlayManager */
     private $trackPlayManager;
 
+    /** @var ObjectManager */
+    private $objectManager;
+
     /** @var callback */
     private $importCallback;
 
-    public function __construct(Client $client, TrackPlayManager $trackPlayManager)
+    public function __construct(Client $client, TrackPlayManager $trackPlayManager, ObjectManager $objectManager)
     {
         $this->client               = $client;
         $this->trackPlayManager     = $trackPlayManager;
+        $this->objectManager = $objectManager;
     }
 
     public function setFactory(ImportFactory $factory)
@@ -94,15 +101,23 @@ class TrackPlayImporter implements ImporterInterface
         $this->trackPlayManager->updateTrackPlay($trackPlay, false);
     }
 
-    private function fetchPage(array $parameters)
+    private function fetchPage(array $inputParameters)
     {
-        $command = $this->client->getCommand('user.getRecentTracks', array(
-            'user'      => $parameters['user'],
-            'page'      => $parameters['page'],
+        $parameters = array(
+            'user'      => $inputParameters['user'],
+            'page'      => $inputParameters['page'],
             'limit'     => 200,
             'format'    => 'json'
-        ));
-        $response = $this->client->execute($command);
+        );
+        if (isset($inputParameters['from']) && $inputParameters['from']) {
+            $parameters['from'] = $inputParameters['from'];
+        }
+        if (isset($inputParameters['to']) && $inputParameters['to']) {
+            $parameters['to'] = $inputParameters['to'];
+        }
+
+        $command = $this->client->getCommand('user.getRecentTracks', $parameters);
+        $response = $this->executeFetchPage($command);
 
         if (!isset($response['recenttracks']['track'])) {
             throw new \RuntimeException(sprintf('Received invalid response from last.fm: %s', print_r($response, true)));
@@ -111,19 +126,29 @@ class TrackPlayImporter implements ImporterInterface
         return $response;
     }
 
+    private function executeFetchPage($command)
+    {
+        try {
+            return $this->client->execute($command);
+        } catch (ServerErrorResponseException $e) {
+            sleep(10);
+            return $this->executeFetchPage($command);
+        }
+    }
+
     private function savePage(array $rawTrackPlays, UserInterface $user)
     {
         foreach ($rawTrackPlays as $rawTrackPlay) {
             $artist = $this->factory->getArtistImporter()->import($rawTrackPlay['artist']);
             $album  = $this->factory->getAlbumImporter()->import($rawTrackPlay['album'], $artist);
             $track  = $this->factory->getTrackImporter()->import($rawTrackPlay, $album, $artist);
-            $this->importTrackPlay($rawTrackPlay, $track, $user);
+            if ($track) {
+                $this->importTrackPlay($rawTrackPlay, $track, $user);
+            }
         }
 
-        $this->factory->getArtistImporter()->flush();
-        $this->factory->getAlbumImporter()->flush();
-        $this->factory->getTrackImporter()->flush();
-        $this->trackPlayManager->flush();
-        $this->cache = array();
+        $this->objectManager->flush();
+        $this->objectManager->clear();
+        gc_collect_cycles();
     }
 }

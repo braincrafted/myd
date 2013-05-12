@@ -24,15 +24,11 @@ class ArtistImporter implements ImporterInterface
     public function import(array $rawData)
     {
         $data = array(
-            'name'  => $rawData['#text'],
-            'mbid'  => $rawData['mbid']
+            'name'  => trim($rawData['#text']),
+            'mbid'  => trim($rawData['mbid'])
         );
 
         $artist = null;
-
-        if (isset($this->cache[$data['mbid']])) {
-            $artist = $this->cache[$data['mbid']];
-        }
 
         if (!$artist && $data['mbid']) {
             $artist = $this->artistManager->findArtistByMbid($data['mbid']);
@@ -42,19 +38,11 @@ class ArtistImporter implements ImporterInterface
             $artist = $this->artistManager->findArtistByName($data['name']);
         }
 
-        if (!$artist) {
+        if (!$artist && ($data['mbid'] || $data['name'])) {
             $artist = $this->artistManager->createArtist($data);
-            $this->artistManager->updateArtist($artist, false);
+            $this->artistManager->updateArtist($artist);
         }
 
-        $this->cache[$artist->getMbid()] = $artist;
-
         return $artist;
-    }
-
-    public function flush()
-    {
-        $this->artistManager->flush();
-        $this->cache = array();
     }
 }

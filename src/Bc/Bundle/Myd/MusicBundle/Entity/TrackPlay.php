@@ -23,14 +23,14 @@ class TrackPlay
 
     /**
      * @var Track
-     * @ORM\ManyToOne(targetEntity="Track", inversedBy="plays")
+     * @ORM\ManyToOne(targetEntity="Track", inversedBy="plays", cascade={"persist"})
      * @ORM\JoinColumn(name="track_id", referencedColumnName="id")
      */
     private $track;
 
     /**
      * @var UserInterface
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="plays")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="plays", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
@@ -163,5 +163,10 @@ class TrackPlay
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    public function __toString()
+    {
+        return sprintf('TrackPlay [#%d]', $this->id);
     }
 }

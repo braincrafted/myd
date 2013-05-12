@@ -24,6 +24,7 @@ services:
         arguments:
             - @bc_lastfm.client
             - @bc_myd_music.track_play_manager
+            - @doctrine.orm.entity_manager
 
     bc_myd_lastfm.import.user:
         class: Bc\Bundle\Myd\LastFmBundle\Import\UserImporter
