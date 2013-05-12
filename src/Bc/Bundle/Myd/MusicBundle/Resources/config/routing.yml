@@ -1,0 +1,3 @@
+bc_myd_music_recenttracks:
+    path:      /recent-tracks
+    defaults:  { _controller: BcMydMusicBundle:RecentTracks:recentTracks }

@@ -33,9 +33,9 @@ class TrackPlayManager
         return $trackPlay;
     }
 
-    public function findTrackPlays()
+    public function findTrackPlays($order = null, $limit = null)
     {
-        return $this->repository->findAll();
+        return $this->repository->findBy(array(), $order, $limit);
     }
 
     public function findTrackPlayByMbid($mbid)

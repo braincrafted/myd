@@ -14,4 +14,4 @@ parameters:
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-    lastfm_api_ley:    ~
+    lastfm_api_key:    ~

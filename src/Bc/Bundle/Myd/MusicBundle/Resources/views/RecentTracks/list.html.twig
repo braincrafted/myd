@@ -1,0 +1,30 @@
+{% extends 'BcMydCoreBundle::layout.html.twig' %}
+
+{% block content %}
+
+<table class="table table-condensed table-striped table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Track</th>
+            <th>User</th>
+            <th>Play date</th>
+            <th>Created at</th>
+            <th>Updated at</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for play in plays %}
+        <tr>
+            <td>{{ play.id }}</td>
+            <td>{{ play.track.id }}</td>
+            <td>{{ play.user.id }}</td>
+            <td>{{ play.playDate|date('Y-m-d H:i:s') }}</td>
+            <td>{{ play.createdAt|date('Y-m-d H:i:s') }}</td>
+            <td>{{ play.updatedAt|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}

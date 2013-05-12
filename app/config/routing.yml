@@ -1,0 +1,3 @@
+bc_myd_music:
+    resource: "@BcMydMusicBundle/Resources/config/routing.yml"
+    prefix: /music
